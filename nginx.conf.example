@@ -1,0 +1,23 @@
+# Nginx server block for an Ubuntu VPS (copy to /etc/nginx/sites-available/bytecode and enable).
+# server {
+#     listen 80;
+#     server_name www.example.com example.com;   # TODO: your domain
+#     root /var/www/bytecode/dist;                  # output of `npm run build`
+#     index index.html;
+#
+#     # Long-lived cache for hashed assets
+#     location /assets/ {
+#         expires 1y;
+#         add_header Cache-Control "public, immutable";
+#         try_files $uri =404;
+#     }
+#
+#     # SPA fallback: unknown paths are served index.html so deep links work after refresh
+#     location / {
+#         try_files $uri $uri/ /index.html;
+#     }
+#
+#     gzip on;
+#     gzip_types text/css application/javascript image/svg+xml application/json;
+# }
+# Then: sudo certbot --nginx -d example.com -d www.example.com  (SSL)

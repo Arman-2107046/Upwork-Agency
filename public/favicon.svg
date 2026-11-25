@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <style>
+    .tile { fill: #0A0A0A } .chev { stroke: #FFFFFF }
+    @media (prefers-color-scheme: dark) { .tile { fill: #FFFFFF } .chev { stroke: #0A0A0A } }
+  </style>
+  <rect class="tile" width="100" height="100" rx="24"/>
+  <polyline class="chev" points="30,31 52,50 30,69" fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="58" y1="70" x2="74" y2="70" stroke="#1F6BFF" stroke-width="9" stroke-linecap="round"/>
+</svg>

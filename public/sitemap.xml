@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.example.com/</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/work</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/about</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/contact</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/e-commerce</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/web-apps</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/websites</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/ai-chatbots</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/automation</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/database</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/cloud</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/services/design</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/work/customtailor</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://www.example.com/work/shirtsmockup</loc><lastmod>2026-11-25</lastmod></url>
+</urlset>
