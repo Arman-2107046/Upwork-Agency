@@ -2,7 +2,7 @@ import { m, useScroll, useTransform } from 'framer-motion'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { TextLink } from '@/components/ui/TextLink'
-import { projects } from '@/data/projects'
+import { featuredProjects } from '@/data/projects'
 import { PINNED, useMediaQuery } from '@/hooks/useMediaQuery'
 import { useMotionPreference } from '@/motion/useMotionPreference'
 import { ProjectCard } from '../ProjectCard'
@@ -58,7 +58,7 @@ function PinnedGallery() {
           className="flex w-max items-center gap-10 pr-[8vw] pl-[max(2rem,calc((100vw-1200px)/2+2rem))]"
         >
           <div className="w-[min(30rem,32vw)] shrink-0">{heading}</div>
-          {projects.map((p, i) => (
+          {featuredProjects.map((p, i) => (
             <ProjectCard
               key={p.slug}
               project={p}
@@ -84,7 +84,7 @@ function SnapGallery() {
         aria-label="Featured projects"
         className="mt-12 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-4 sm:scroll-px-8 sm:px-8 lg:mx-auto lg:grid lg:max-w-content lg:grid-cols-2 lg:overflow-visible"
       >
-        {projects.map((p, i) => (
+        {featuredProjects.map((p, i) => (
           <li key={p.slug} className="w-[85%] shrink-0 snap-start sm:w-[70%] lg:w-auto">
             <ProjectCard project={p} index={i} />
           </li>

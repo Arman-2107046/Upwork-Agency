@@ -75,7 +75,7 @@ export default function About() {
             mutedWords={3}
           />
           <ul className="mt-16 grid gap-10 md:grid-cols-2 lg:mt-20">
-            {projects.map((p, i) => (
+            {projects.slice(0, 4).map((p, i) => (
               <li key={p.slug}>
                 <ProjectCard project={p} index={i} />
               </li>

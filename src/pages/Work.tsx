@@ -10,14 +10,14 @@ export default function Work() {
     <>
       <Seo
         title="Work"
-        description="Selected projects: CustomTailor.store, an interactive tailoring platform, and ShirtsMockup Store, a digital store for apparel PSD mockups."
+        description="Selected projects: product configurators, digital stores and company websites for software, IT services, apparel and manufacturing businesses."
         path="/work"
       />
       <PageHero
         eyebrow="Work"
         title="Selected projects."
         mutedWords={1}
-        intro="Product configurators and digital stores, designed and built end to end."
+        intro="Product configurators, digital stores and company websites, designed and built end to end."
       />
       <section aria-label="Projects" className="container-content py-24">
         <ul className="grid gap-x-8 gap-y-16 md:grid-cols-2">
