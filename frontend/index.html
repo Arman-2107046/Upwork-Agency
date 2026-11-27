@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!--app:head-->
+    <!-- Laravel fills the slot above with the page's title, description, Open Graph and JSON-LD
+         (backend/resources/views/spa/head.blade.php). Tags marked data-rh are then managed by
+         react-helmet-async as visitors navigate. -->
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Fonts are self-hosted via Fontsource (bundled, same origin), so no third-party
+         preconnect is needed. If you switch to a font CDN, add its preconnect here. -->
+
+    <script>
+      // Apply the saved theme before first paint to avoid a flash.
+      ;(function () {
+        try {
+          var t = localStorage.getItem('theme')
+          if (t === 'dark') document.documentElement.classList.add('dark')
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <p style="padding: 24px; font-family: system-ui, sans-serif">
+        This website needs JavaScript enabled to display its content.
+      </p>
+    </noscript>
+    <div id="root"></div>
+    <!--app:content-->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

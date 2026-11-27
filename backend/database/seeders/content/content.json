@@ -1,0 +1,634 @@
+{
+  "site": {
+    "brand_name": "Bytecode Software Labs",
+    "short_name": "Bytecode",
+    "handle": "bytecode@labs",
+    "tagline": "Web Development, E-commerce, AI Automation & Digital Design",
+    "description": "We design, develop, and deliver professional websites, e-commerce platforms, interactive product configurators, SaaS applications, enterprise software, AI chatbots, and workflow automation, from database to live deployment.",
+    "email": "",
+    "notify_email": "",
+    "upwork_url": "",
+    "social": [],
+    "response_time": "within 24 hours",
+    "years_experience": "17+",
+    "upwork_badge": true,
+    "theme_color": "#FFFFFF"
+  },
+  "pages": {
+    "home": {
+      "title": "Bytecode Software Labs | Web, E-commerce & AI Automation",
+      "description": "Websites, e-commerce, product configurators, SaaS, AI chatbots and workflow automation, designed and built end to end."
+    },
+    "services": {
+      "title": "Services",
+      "description": "E-commerce, web apps and SaaS, websites, AI chatbots, automation, databases, cloud deployment and graphic design, built end to end."
+    },
+    "work": {
+      "title": "Work",
+      "description": "Selected projects: product configurators, digital stores and company websites for software, IT services, apparel and manufacturing businesses."
+    },
+    "about": {
+      "title": "About",
+      "description": "Bytecode Software Labs is a multidisciplinary design and development agency: graphic designers, frontend developers and backend developers in one team."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Tell us about your website, store, configurator, SaaS or automation project. We reply within 24 hours."
+    }
+  },
+  "home": {
+    "hero_eyebrow": "Web Development, E-commerce, AI Automation & Digital Design",
+    "hero_headline": "Web development, e-commerce and AI automation, built end to end.",
+    "hero_sub": "We design, develop and deliver professional websites, e-commerce platforms, product configurators, SaaS applications, enterprise software, AI chatbots and workflow automation, from database to live deployment.",
+    "hero_tech": [
+      "React",
+      "Next.js",
+      "Laravel",
+      "Node.js",
+      "PostgreSQL",
+      "Docker",
+      "n8n"
+    ],
+    "intro": "We design, develop, and deliver professional websites, e-commerce platforms, interactive product configurators, SaaS applications, enterprise software, AI chatbots, and workflow automation, from database to live deployment.",
+    "final_cta": "Need an e-commerce site, SaaS platform, product configurator, AI chatbot, or design services? We're ready to help.",
+    "process_steps": [
+      {
+        "title": "Discover",
+        "text": "We clarify goals, scope and requirements, and agree on clear milestones."
+      },
+      {
+        "title": "Design",
+        "text": "We shape the interface and the architecture before production code is written."
+      },
+      {
+        "title": "Build",
+        "text": "We develop in scoped milestones, with regular updates and code in your repository."
+      },
+      {
+        "title": "Deploy",
+        "text": "We set up servers, CI/CD and SSL, then launch to production."
+      },
+      {
+        "title": "Support",
+        "text": "We provide ongoing maintenance and technical support after launch."
+      }
+    ],
+    "why_items": [
+      {
+        "text": "Established Upwork agency with extensive project experience",
+        "claim": "upwork_badge"
+      },
+      {
+        "text": "Specialized expertise in fashion e-commerce and customization",
+        "claim": null
+      },
+      {
+        "text": "Complete solutions from design and database to deployment",
+        "claim": null
+      },
+      {
+        "text": "AI chatbot and automation expertise",
+        "claim": null
+      },
+      {
+        "text": "Ongoing maintenance and technical support",
+        "claim": null
+      }
+    ],
+    "showcase": {
+      "project_slug": "customtailor",
+      "eyebrow": "Configurator showcase",
+      "title": "CustomTailor.store",
+      "intro": "An interactive custom tailoring platform with fabric selection, garment customization, live previews, dynamic pricing, and personalized ordering.",
+      "stages": [
+        {
+          "title": "Choose fabric",
+          "text": "Customers browse the fabric range and pick the one for their garment.",
+          "image": "showcase/fabric.webp",
+          "alt": "Fabric selection panel next to the suit preview",
+          "sketch": "fabric"
+        },
+        {
+          "title": "Customize the garment",
+          "text": "Style options and garment details are chosen step by step.",
+          "image": "showcase/customize.webp",
+          "alt": "Style options for body style, vents and lapels",
+          "sketch": "customize"
+        },
+        {
+          "title": "Live preview",
+          "text": "Every choice is reflected in a live preview of the garment.",
+          "image": "showcase/preview.webp",
+          "alt": "Suit preview updated to the selected plaid fabric",
+          "sketch": "preview"
+        },
+        {
+          "title": "Dynamic pricing",
+          "text": "The price updates instantly as options change.",
+          "image": "showcase/pricing.webp",
+          "alt": "Price updated to $300 after choosing a different fabric",
+          "sketch": "pricing"
+        },
+        {
+          "title": "Personalized order",
+          "text": "The finished configuration is placed as a personalized order.",
+          "image": "showcase/order.webp",
+          "alt": "Configured suit added to the cart, with the View cart button",
+          "sketch": "order"
+        }
+      ]
+    }
+  },
+  "about": {
+    "statement": "Bytecode Software Labs is a multidisciplinary design and development agency combining 17+ years of creative design expertise with modern web development. Our team includes graphic designers, frontend developers, and backend developers.",
+    "closing_line": "Let's build something exceptional together!",
+    "how_we_work": [
+      {
+        "title": "Scoped milestones",
+        "text": "Work is split into clear milestones with agreed deliverables."
+      },
+      {
+        "title": "Regular progress updates",
+        "text": "You see progress as it happens, not only at the end."
+      },
+      {
+        "title": "Code in your repository",
+        "text": "Source code lives in your repository from the first commit."
+      },
+      {
+        "title": "Documented handover",
+        "text": "You receive documentation so your team can run and extend the project."
+      }
+    ],
+    "team_roles": [
+      {
+        "title": "Graphic designers",
+        "text": "Brand assets, apparel mockups, product imagery and interface design."
+      },
+      {
+        "title": "Frontend developers",
+        "text": "Responsive interfaces, configurators and web app front ends."
+      },
+      {
+        "title": "Backend developers",
+        "text": "APIs, databases, integrations, automation and deployment."
+      }
+    ]
+  },
+  "projects": [
+    {
+      "slug": "customtailor",
+      "title": "CustomTailor.store",
+      "url": "https://customtailor.store",
+      "category": "Custom tailoring platform",
+      "overview": "An interactive custom tailoring platform with fabric selection, garment customization, live previews, dynamic pricing, and personalized ordering.",
+      "scope": [
+        "Fabric selection",
+        "Garment customization",
+        "Live previews",
+        "Dynamic pricing",
+        "Personalized ordering"
+      ],
+      "technologies": [],
+      "cover_image": "work/customtailor-home.webp",
+      "cover_alt": "CustomTailor.store homepage",
+      "gallery": [
+        {
+          "image": "work/customtailor-fabric.webp",
+          "alt": "Suit configurator with the fabric selection panel open"
+        },
+        {
+          "image": "work/customtailor-style.webp",
+          "alt": "Style step: body style, vents and lapel options"
+        },
+        {
+          "image": "work/customtailor-preview.webp",
+          "alt": "Live preview of the suit in the selected plaid fabric"
+        }
+      ],
+      "is_featured": true
+    },
+    {
+      "slug": "shirtsmockup",
+      "title": "ShirtsMockup Store",
+      "url": "https://shirtsmockup.com",
+      "category": "Digital product store",
+      "overview": "A digital product store featuring professional apparel PSD mockups, organized collections, and a responsive shopping experience.",
+      "scope": [
+        "Digital product store",
+        "Apparel PSD mockups",
+        "Organized collections",
+        "Responsive shopping"
+      ],
+      "technologies": [
+        "Photoshop"
+      ],
+      "cover_image": "work/shirtsmockup-home.webp",
+      "cover_alt": "ShirtsMockup Store homepage",
+      "gallery": [
+        {
+          "image": "work/shirtsmockup-products.webp",
+          "alt": "Product grid of apparel PSD mockups"
+        },
+        {
+          "image": "work/shirtsmockup-product.webp",
+          "alt": "Product page with licence options and purchase buttons"
+        },
+        {
+          "image": "work/shirtsmockup-mobile.webp",
+          "alt": "The store on mobile: homepage and product page"
+        }
+      ],
+      "is_featured": true
+    },
+    {
+      "slug": "amidx",
+      "title": "AmidX Technologies",
+      "url": "https://amidx.net",
+      "category": "Software company website",
+      "overview": "The website of AmidX Technologies, a digital engineering company: twelve solution areas from web and app development to AI and cybersecurity, industry pages, a portfolio, a blog, pricing and client accounts.",
+      "scope": [
+        "Solutions catalogue",
+        "Industry pages",
+        "Portfolio and blog",
+        "Pricing",
+        "Login and registration"
+      ],
+      "technologies": [],
+      "cover_image": "work/amidx-home.webp",
+      "cover_alt": "AmidX Technologies homepage",
+      "gallery": [
+        {
+          "image": "work/amidx-solutions.webp",
+          "alt": "Solutions list with numbered service areas"
+        },
+        {
+          "image": "work/amidx-industries.webp",
+          "alt": "Industry section in a dark grid layout"
+        },
+        {
+          "image": "work/amidx-mobile.webp",
+          "alt": "The site on mobile: homepage and solutions"
+        }
+      ],
+      "is_featured": true
+    },
+    {
+      "slug": "amidventure",
+      "title": "Amid Venture",
+      "url": "https://www.amidventure.com",
+      "category": "Corporate group website",
+      "overview": "The corporate website of Amid Venture, a group working across apparel, food, agriculture, accessories, IT and real estate: business divisions, apparel sourcing and product categories, sustainability pages and office locations, in English, Spanish and Japanese.",
+      "scope": [
+        "Business division showcase",
+        "Apparel sourcing and product categories",
+        "Sustainability pages",
+        "Multilingual content",
+        "Office locations and contact"
+      ],
+      "technologies": [],
+      "cover_image": "work/amidventure-home.webp",
+      "cover_alt": "Amid Venture homepage hero",
+      "gallery": [
+        {
+          "image": "work/amidventure-businesses.webp",
+          "alt": "Introduction and the group's business divisions"
+        },
+        {
+          "image": "work/amidventure-sourcing.webp",
+          "alt": "Amid Sourcing section with apparel imagery"
+        },
+        {
+          "image": "work/amidventure-mobile.webp",
+          "alt": "The site on mobile: homepage and product categories"
+        }
+      ],
+      "is_featured": true
+    },
+    {
+      "slug": "avalon",
+      "title": "Avalon Technology Ltd",
+      "url": "https://avatechbd.com",
+      "category": "IT services company website",
+      "overview": "The website of Avalon Technology Ltd, an enterprise IT services company: cybersecurity, cloud and infrastructure, networking, software and IT support services, industry sectors, a client showcase and careers.",
+      "scope": [
+        "Service catalogue",
+        "Industry sectors",
+        "Client showcase",
+        "Careers",
+        "Contact"
+      ],
+      "technologies": [],
+      "cover_image": "work/avalon-home.webp",
+      "cover_alt": "Avalon Technology homepage",
+      "gallery": [
+        {
+          "image": "work/avalon-services.webp",
+          "alt": "Enterprise technology services grid"
+        },
+        {
+          "image": "work/avalon-clients.webp",
+          "alt": "Client logo showcase"
+        },
+        {
+          "image": "work/avalon-mobile.webp",
+          "alt": "The site on mobile: homepage and services"
+        }
+      ],
+      "is_featured": true
+    },
+    {
+      "slug": "icepeak",
+      "title": "Ice Peak Design Limited",
+      "url": "https://icepeakbd.com",
+      "category": "Apparel sourcing company website",
+      "overview": "The website of Ice Peak Design Limited, an apparel sourcing company in Bangladesh: a production line of twelve garment categories, research, design and production services, international office locations and a blog.",
+      "scope": [
+        "Production line catalogue",
+        "Service overview",
+        "International office locations",
+        "Company and management pages",
+        "Blog"
+      ],
+      "technologies": [],
+      "cover_image": "work/icepeak-home.webp",
+      "cover_alt": "Ice Peak Design Limited homepage",
+      "gallery": [
+        {
+          "image": "work/icepeak-production.webp",
+          "alt": "Production line grid of garment categories"
+        },
+        {
+          "image": "work/icepeak-offices.webp",
+          "alt": "International office locations"
+        },
+        {
+          "image": "work/icepeak-mobile.webp",
+          "alt": "The site on mobile: homepage and knitwear page"
+        }
+      ],
+      "is_featured": true
+    },
+    {
+      "slug": "soundgraphic",
+      "title": "Sound Graphic Accessories",
+      "url": "https://soundgraphicaccessories.com",
+      "category": "Manufacturer website",
+      "overview": "The website of Sound Graphic Accessories, a garments accessories manufacturer in Bangladesh: production capabilities, a product catalogue of hangtags, labels, elastics and threads, facilities, clients and quote requests.",
+      "scope": [
+        "Product catalogue",
+        "Production capabilities",
+        "Facilities",
+        "Client showcase",
+        "Quote requests"
+      ],
+      "technologies": [],
+      "cover_image": "work/soundgraphic-home.webp",
+      "cover_alt": "Sound Graphic Accessories homepage",
+      "gallery": [
+        {
+          "image": "work/soundgraphic-capabilities.webp",
+          "alt": "Production capabilities with factory photography"
+        },
+        {
+          "image": "work/soundgraphic-products.webp",
+          "alt": "Products page with hangtag and sticker items"
+        },
+        {
+          "image": "work/soundgraphic-mobile.webp",
+          "alt": "The site on mobile: homepage and products"
+        }
+      ],
+      "is_featured": true
+    }
+  ],
+  "services": [
+    {
+      "slug": "e-commerce",
+      "title": "E-commerce & Product Customization",
+      "summary": "Online stores and interactive product configurators, from custom tailoring to Shopify.",
+      "bullets": [
+        "Custom E-commerce Websites & Online Stores",
+        "Interactive Product Configurators",
+        "Custom Tailoring & Fashion E-commerce Platforms",
+        "Shopify & Digital Product Stores"
+      ],
+      "outcome": "A working store or configurator, from product data and checkout to live deployment.",
+      "icon": "shopping-bag",
+      "stack_groups": [
+        "Frontend",
+        "Backend",
+        "Databases"
+      ],
+      "example_image": "work/customtailor-preview.webp",
+      "example_alt": "CustomTailor.store suit configurator with live fabric preview",
+      "example_project_slug": "customtailor"
+    },
+    {
+      "slug": "web-apps",
+      "title": "Web Apps, SaaS & Enterprise Software",
+      "summary": "Custom web apps, SaaS platforms, MVPs, dashboards and business systems.",
+      "bullets": [
+        "Custom Web Apps & SaaS Platforms",
+        "Startup MVPs",
+        "CRM, Admin Dashboards & Client Portals",
+        "Enterprise Software for Companies",
+        "Business Management Systems"
+      ],
+      "outcome": "A production-ready application, with the code in your repository and a documented handover.",
+      "icon": "layout-dashboard",
+      "stack_groups": [
+        "Frontend",
+        "Backend",
+        "Databases"
+      ],
+      "example_image": null,
+      "example_alt": null,
+      "example_project_slug": null
+    },
+    {
+      "slug": "websites",
+      "title": "Website Development",
+      "summary": "Responsive business websites, redesigns, SEO and ongoing maintenance.",
+      "bullets": [
+        "Business Websites",
+        "Responsive Frontend & Backend Development",
+        "Website Redesign, SEO & Maintenance"
+      ],
+      "outcome": "A responsive, maintainable website with solid on-page SEO foundations.",
+      "icon": "monitor",
+      "stack_groups": [
+        "Frontend",
+        "Additional"
+      ],
+      "example_image": "work/customtailor-home.webp",
+      "example_alt": "CustomTailor.store homepage",
+      "example_project_slug": "customtailor"
+    },
+    {
+      "slug": "ai-chatbots",
+      "title": "AI Chatbots & LLM Integration",
+      "summary": "Support chatbots, knowledge-base assistants and AI features for your web app.",
+      "bullets": [
+        "Website & Customer-Support Chatbots",
+        "Knowledge-Base Assistants (RAG)",
+        "AI Features for Existing Web Apps"
+      ],
+      "outcome": "A chatbot or AI feature connected to your content and deployed where you need it.",
+      "icon": "bot",
+      "stack_groups": [
+        "AI & Automation",
+        "Backend"
+      ],
+      "example_image": null,
+      "example_alt": null,
+      "example_project_slug": null
+    },
+    {
+      "slug": "automation",
+      "title": "Workflow Automation & API Integration",
+      "summary": "n8n, Zapier and Make workflows, APIs, webhooks and third-party integrations.",
+      "bullets": [
+        "n8n, Zapier & Make Automations",
+        "REST & GraphQL APIs",
+        "Webhooks, Payment & Third-Party Integrations"
+      ],
+      "outcome": "Automated workflows and integrations that connect the tools you already use.",
+      "icon": "workflow",
+      "stack_groups": [
+        "AI & Automation",
+        "Additional"
+      ],
+      "example_image": null,
+      "example_alt": null,
+      "example_project_slug": null
+    },
+    {
+      "slug": "database",
+      "title": "Database Design & Management",
+      "summary": "Schema design, migrations, query tuning and automated backups.",
+      "bullets": [
+        "Schema Design, Migrations & Query Tuning",
+        "PostgreSQL, MySQL, MongoDB & Redis",
+        "Automated Backups & Recovery"
+      ],
+      "outcome": "A well-structured database with migrations, tuned queries and tested backups.",
+      "icon": "database",
+      "stack_groups": [
+        "Databases",
+        "Backend"
+      ],
+      "example_image": null,
+      "example_alt": null,
+      "example_project_slug": null
+    },
+    {
+      "slug": "cloud",
+      "title": "Cloud, VPS & Deployment",
+      "summary": "Server setup, Docker, CI/CD, SSL, uptime monitoring and hosting.",
+      "bullets": [
+        "Ubuntu VPS & Cloud Server Setup",
+        "Docker, CI/CD, SSL & Uptime Monitoring",
+        "Ongoing Hosting & Maintenance"
+      ],
+      "outcome": "A secured, monitored server with automated deployments and SSL.",
+      "icon": "cloud",
+      "stack_groups": [
+        "Infrastructure"
+      ],
+      "example_image": null,
+      "example_alt": null,
+      "example_project_slug": null
+    },
+    {
+      "slug": "design",
+      "title": "Graphic Design & Product Visualization",
+      "summary": "PSD apparel mockups, smart object templates and product imagery.",
+      "bullets": [
+        "Professional PSD Apparel Mockups",
+        "Photoshop Smart Object Templates",
+        "Product Image Editing & Branding Assets"
+      ],
+      "outcome": "Ready-to-use design files and product images for your store or brand.",
+      "icon": "palette",
+      "stack_groups": [
+        "Design"
+      ],
+      "example_image": "work/shirtsmockup-product.webp",
+      "example_alt": "Apparel PSD mockup product page on ShirtsMockup Store",
+      "example_project_slug": "shirtsmockup"
+    }
+  ],
+  "technology_groups": [
+    {
+      "label": "Frontend",
+      "items": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "slider_row": 1
+    },
+    {
+      "label": "Backend",
+      "items": [
+        "Node.js",
+        "Express",
+        "NestJS",
+        "Laravel",
+        "PHP",
+        "Python"
+      ],
+      "slider_row": 1
+    },
+    {
+      "label": "Databases",
+      "items": [
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "Redis"
+      ],
+      "slider_row": 2
+    },
+    {
+      "label": "AI & Automation",
+      "items": [
+        "LLM APIs",
+        "n8n",
+        "Zapier",
+        "Make"
+      ],
+      "slider_row": 2
+    },
+    {
+      "label": "Infrastructure",
+      "items": [
+        "Docker",
+        "Ubuntu VPS",
+        "CI/CD",
+        "Cloudflare"
+      ],
+      "slider_row": 3
+    },
+    {
+      "label": "Design",
+      "items": [
+        "Photoshop",
+        "Illustrator",
+        "Blender"
+      ],
+      "slider_row": 3
+    },
+    {
+      "label": "Additional",
+      "items": [
+        "Three.js",
+        "APIs",
+        "SEO"
+      ],
+      "slider_row": 3
+    }
+  ]
+}
