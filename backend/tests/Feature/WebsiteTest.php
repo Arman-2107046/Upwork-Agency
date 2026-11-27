@@ -45,6 +45,14 @@ class WebsiteTest extends TestCase
         $this->get('/')->assertOk()->assertDontSee('</script><script>alert(1)', false);
     }
 
+    public function test_without_app_url_links_use_the_address_the_site_is_visited_on(): void
+    {
+        config(['app.url' => '']);
+
+        $this->get('http://bytecode.example/sitemap.xml')->assertSee('<loc>http://bytecode.example/work/customtailor</loc>', false);
+        $this->get('http://bytecode.example/about')->assertSee('href="http://bytecode.example/about"', false);
+    }
+
     public function test_sitemap_and_robots_list_published_pages(): void
     {
         $this->get('/sitemap.xml')

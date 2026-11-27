@@ -22,7 +22,7 @@ class ContentSeeder extends Seeder
     {
         $seed = Defaults::seed();
 
-        $this->copyImages();
+        self::copyImages();
 
         foreach (['site', 'home', 'about', 'pages'] as $key) {
             Setting::query()->firstOrCreate(['key' => $key], ['value' => $seed[$key]]);
@@ -49,8 +49,11 @@ class ContentSeeder extends Seeder
         SiteContent::flush();
     }
 
-    /** Copies the original screenshots to the public disk, where uploads from the admin also live. */
-    private function copyImages(): void
+    /**
+     * Copies the original screenshots to the public disk, where uploads from the admin also live.
+     * Existing files are kept. Also run on every start, so an imported database finds its images.
+     */
+    public static function copyImages(): void
     {
         $disk = Storage::disk('public');
         $source = Defaults::imagesPath();

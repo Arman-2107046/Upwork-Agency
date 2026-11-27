@@ -30,6 +30,9 @@ class BootstrapApp extends Command
             ]) === 0);
         }
 
+        // Cheap when nothing is missing; needed after importing a database dump on a new server.
+        ContentSeeder::copyImages();
+
         if (! User::query()->exists()) {
             $admin = config('app.admin');
             if ($admin['email'] && $admin['password']) {

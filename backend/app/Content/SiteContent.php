@@ -33,9 +33,16 @@ final class SiteContent
         Cache::forget(self::CACHE_KEY);
     }
 
+    /** APP_URL, or the address the site is being visited on when APP_URL is not set. */
     public static function siteUrl(): string
     {
-        return rtrim((string) config('app.url'), '/');
+        $url = rtrim((string) config('app.url'), '/');
+
+        if (in_array($url, ['', 'http://localhost'], true) && (! app()->runningInConsole() || app()->runningUnitTests())) {
+            return request()->getSchemeAndHttpHost();
+        }
+
+        return $url;
     }
 
     /**

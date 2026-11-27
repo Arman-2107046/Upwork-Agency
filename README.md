@@ -90,33 +90,36 @@ of media the site no longer uses: `php artisan media:sync --prune`.
 1. Push this repository to GitHub, GitLab or any Git host Coolify can read.
 2. In Coolify: **New Resource › Public/Private Repository**, choose the repository, and set
    **Build Pack** to **Docker Compose** with the file `/docker-compose.yml`.
-3. Under **Environment Variables**, set:
+3. Under the **app** service, set your domain, e.g. `https://www.example.com` (Coolify routes it
+   to port 8080 and handles HTTPS). Without one, Coolify generates a test domain.
+4. Under **Environment Variables**, set the first admin (created on the first start only):
 
    | Variable         | Value                                                               |
    | ---------------- | ------------------------------------------------------------------- |
-   | `APP_URL`        | Your public URL, e.g. `https://www.example.com` (no trailing slash) |
-   | `APP_KEY`        | Output of `echo "base64:$(openssl rand -base64 32)"`                |
-   | `DB_PASSWORD`    | A long random password                                              |
-   | `ADMIN_EMAIL`    | Your email (first admin, created on the first start only)           |
+   | `ADMIN_EMAIL`    | Your email                                                          |
    | `ADMIN_PASSWORD` | A strong password (change it later in the admin under your profile) |
 
-   Optional: `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_IMAGES_HASH` to serve
-   images and videos from Cloudflare (see "Cloudflare Images and Stream" above), and
-   `MAIL_MAILER=smtp` with `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`,
-   `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` to receive contact form emails. Without them,
-   messages are still saved in the admin inbox.
+   Everything else is optional. Coolify generates the app key (`SERVICE_PASSWORD_APPKEY`) and
+   the database password (`SERVICE_PASSWORD_POSTGRES`) itself, keeps them between deploys, and
+   fills `APP_URL` from the domain (`SERVICE_URL_APP`). Optional: `CLOUDFLARE_ACCOUNT_ID`,
+   `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_IMAGES_HASH` to serve images and videos from Cloudflare
+   (see "Cloudflare Images and Stream" above), and `MAIL_MAILER=smtp` with `MAIL_HOST`,
+   `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` to receive contact form
+   emails. Without them, messages are still saved in the admin inbox.
 
-4. Under the **app** service, set the domain to `https://www.example.com:8080` (the container
-   listens on port 8080; Coolify's proxy handles HTTPS on 443).
 5. Deploy. On every start the container runs migrations, caches config and routes, and runs
    `php artisan app:bootstrap`, which seeds the original content and creates the admin on the
    first start only. Redeploys keep all data.
 
-Data lives in two named volumes: `db-data` (PostgreSQL) and `app-media` (uploaded images).
-Enable Coolify's scheduled database backups for the `db` service.
+Do not edit `SERVICE_PASSWORD_POSTGRES` after the first deploy: the database keeps the password
+it was created with. Data lives in two named volumes: `db-data` (PostgreSQL) and `app-media`
+(uploaded images). Enable Coolify's scheduled database backups for the `db` service.
 
-Any other Docker host works the same way: `docker compose up -d --build` with the variables in
-a `.env` file next to `docker-compose.yml`, behind a reverse proxy that terminates HTTPS.
+**Other Docker hosts**: outside Coolify the `SERVICE_*` values are not generated. Put
+`SERVICE_URL_APP`, `SERVICE_PASSWORD_APPKEY` (exactly 32 letters and digits) and
+`SERVICE_PASSWORD_POSTGRES` in a `.env` file next to `docker-compose.yml`, run
+`docker compose up -d --build`, and put a reverse proxy that terminates HTTPS in front of
+port 8080.
 
 ## Local development
 

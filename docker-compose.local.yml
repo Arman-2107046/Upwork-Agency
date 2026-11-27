@@ -1,11 +1,20 @@
-# Local overrides: the site on http://localhost:8080 (APP_PORT changes it) (database shell: docker compose exec db psql -U bytecode).
+# Local overrides: the site on http://localhost:8080 (APP_PORT changes it).
+# Database shell: docker compose exec db psql -U bytecode
 #   docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+# Outside Coolify there are no generated SERVICE_* values, so the secrets come from .env.
 services:
   app:
     ports:
-      - '${APP_PORT:-8080}:8080'
+      - "${APP_PORT:-8080}:8080"
     environment:
+      APP_URL: ${APP_URL:-http://localhost:8080}
+      APP_KEY: ${APP_KEY:?Set APP_KEY in .env (see .env.example)}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
       APP_ENV: local
-      APP_DEBUG: 'true'
-      SESSION_SECURE_COOKIE: 'false'
+      APP_DEBUG: "true"
+      SESSION_SECURE_COOKIE: "false"
       LOG_LEVEL: debug
+
+  db:
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}

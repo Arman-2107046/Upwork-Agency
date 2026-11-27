@@ -1,7 +1,11 @@
 # Production stack for Coolify (Docker Compose build pack) or any Docker host.
 #   app: React site + JSON API + Filament admin (/admin), one image built from ./Dockerfile
 #   db:  PostgreSQL 17
-# Set the variables below in Coolify's "Environment Variables" tab. See README.md, "Deploy on Coolify".
+#
+# On Coolify nothing has to be set before the first deploy: Coolify generates the app key and
+# the database password (SERVICE_PASSWORD_*) and fills in the URL from the domain you give the
+# app service (SERVICE_URL_APP_8080 = the container listens on port 8080). Optional settings
+# (first admin, email, Cloudflare) go in the "Environment Variables" tab. See README.md.
 services:
   app:
     build:
@@ -11,49 +15,46 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    # The container listens on port 8080. In Coolify, set this service's domain as
-    # https://your-domain.com:8080 (Coolify's proxy serves it on 443 with HTTPS).
-    expose:
-      - '8080'
     environment:
-      APP_NAME: ${APP_NAME:-Bytecode Software Labs}
-      APP_ENV: ${APP_ENV:-production}
-      APP_DEBUG: ${APP_DEBUG:-false}
-      APP_KEY: ${APP_KEY:?Set APP_KEY (generate with openssl rand -base64 32 and prefix it with base64:)}
-      APP_URL: ${APP_URL:?Set APP_URL to the public URL, e.g. https://www.example.com}
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: ${DB_DATABASE:-bytecode}
-      DB_USERNAME: ${DB_USERNAME:-bytecode}
-      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
-      SESSION_DRIVER: database
-      SESSION_SECURE_COOKIE: ${SESSION_SECURE_COOKIE:-true}
-      CACHE_STORE: database
-      QUEUE_CONNECTION: sync
-      LOG_LEVEL: ${LOG_LEVEL:-warning}
+      - SERVICE_URL_APP_8080
+      - APP_URL=${SERVICE_URL_APP}
+      - APP_KEY=${SERVICE_PASSWORD_APPKEY}
+      - APP_NAME=${APP_NAME:-Bytecode Software Labs}
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_DATABASE:-bytecode}
+      - DB_USERNAME=${DB_USERNAME:-bytecode}
+      - DB_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
+      - SESSION_DRIVER=database
+      - SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-true}
+      - CACHE_STORE=database
+      - QUEUE_CONNECTION=sync
+      - LOG_LEVEL=${LOG_LEVEL:-warning}
       # First admin, created on the first start only. Change the password in the admin afterwards.
-      ADMIN_NAME: ${ADMIN_NAME:-Admin}
-      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      - ADMIN_NAME=${ADMIN_NAME:-Admin}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
       # Contact form emails. With MAIL_MAILER=log, messages are only kept in the admin inbox.
-      MAIL_MAILER: ${MAIL_MAILER:-log}
-      MAIL_HOST: ${MAIL_HOST:-}
-      MAIL_PORT: ${MAIL_PORT:-587}
-      MAIL_USERNAME: ${MAIL_USERNAME:-}
-      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
-      MAIL_SCHEME: ${MAIL_SCHEME:-}
-      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-hello@example.com}
-      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Bytecode Software Labs}
-      CONTACT_NOTIFY_EMAIL: ${CONTACT_NOTIFY_EMAIL:-}
+      - MAIL_MAILER=${MAIL_MAILER:-log}
+      - MAIL_HOST=${MAIL_HOST:-}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_USERNAME=${MAIL_USERNAME:-}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:-}
+      - MAIL_SCHEME=${MAIL_SCHEME:-}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS:-hello@example.com}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME:-Bytecode Software Labs}
+      - CONTACT_NOTIFY_EMAIL=${CONTACT_NOTIFY_EMAIL:-}
       # Cloudflare Images (all website images) and Stream (project videos). Optional: without
       # them, media is served from the app-media volume.
-      CLOUDFLARE_ACCOUNT_ID: ${CLOUDFLARE_ACCOUNT_ID:-}
-      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:-}
-      CLOUDFLARE_IMAGES_HASH: ${CLOUDFLARE_IMAGES_HASH:-}
-      CLOUDFLARE_MEDIA_PREFIX: ${CLOUDFLARE_MEDIA_PREFIX:-bytecode}
+      - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-}
+      - CLOUDFLARE_IMAGES_HASH=${CLOUDFLARE_IMAGES_HASH:-}
+      - CLOUDFLARE_MEDIA_PREFIX=${CLOUDFLARE_MEDIA_PREFIX:-bytecode}
     volumes:
-      # Uploaded images and videos (and the original screenshots, copied on first start).
+      # Uploaded images and videos (and the original screenshots, copied on start).
       # Kept even with Cloudflare on: they are the originals and the fallback.
       - app-media:/var/www/html/storage/app/public
 
@@ -61,13 +62,14 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_DATABASE:-bytecode}
-      POSTGRES_USER: ${DB_USERNAME:-bytecode}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE:-bytecode}
+      - POSTGRES_USER=${DB_USERNAME:-bytecode}
+      - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      test:
+        ["CMD-SHELL", 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
       interval: 5s
       timeout: 5s
       retries: 10
