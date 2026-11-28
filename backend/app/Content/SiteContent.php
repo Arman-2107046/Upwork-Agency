@@ -125,6 +125,7 @@ final class SiteContent
                     ->values()
                     ->all(),
                 'showcase' => $this->showcase($home['showcase'] ?? [], $publishedSlugs),
+                'deployment' => self::deployment($home['deployment'] ?? []),
             ],
             'about' => [
                 'statement' => $about['statement'],
@@ -231,6 +232,31 @@ final class SiteContent
                 ->filter(fn ($row) => $row['items'] !== [])
                 ->values()
                 ->all(),
+        ];
+    }
+
+    /**
+     * Home page "Deployment & Maintenance" section. Empty groups are dropped; the website hides
+     * the section when no platform is left.
+     *
+     * @param  array<string, mixed>  $section
+     * @return array<string, mixed>
+     */
+    private static function deployment(array $section): array
+    {
+        return [
+            'eyebrow' => trim((string) ($section['eyebrow'] ?? '')),
+            'title' => trim((string) ($section['title'] ?? '')),
+            'intro' => trim((string) ($section['intro'] ?? '')),
+            'platformGroups' => collect($section['platform_groups'] ?? [])
+                ->map(fn ($group) => [
+                    'label' => trim((string) ($group['label'] ?? '')),
+                    'items' => collect($group['items'] ?? [])->map(fn ($item) => trim((string) $item))->filter()->values()->all(),
+                ])
+                ->filter(fn ($group) => $group['items'] !== [])
+                ->values()
+                ->all(),
+            'maintenance' => self::pairs($section['maintenance'] ?? [], ['title', 'text']),
         ];
     }
 

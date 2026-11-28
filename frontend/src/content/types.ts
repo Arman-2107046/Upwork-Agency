@@ -198,6 +198,16 @@ export interface PostCommentItem {
   date: string
 }
 
+/** Home page "Deployment & Maintenance" section (Pages > Home page > Deployment). */
+export interface Deployment {
+  eyebrow: string
+  title: string
+  intro: string
+  /** Logo groups; never empty groups. The section is hidden when there are none. */
+  platformGroups: TechGroup[]
+  maintenance: TitledText[]
+}
+
 export interface SiteContent {
   site: SiteSettings
   pages: Record<PageKey, PageSeo>
@@ -209,6 +219,7 @@ export interface SiteContent {
     processSteps: TitledText[]
     whyItems: string[]
     showcase: Showcase
+    deployment: Deployment
   }
   about: {
     statement: string

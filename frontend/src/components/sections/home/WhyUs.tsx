@@ -1,5 +1,6 @@
 import { m } from 'framer-motion'
 import { SectionHeader } from '@/components/ui/SectionHeader'
+import { sectionIndex } from '@/data/home'
 import { whyItems } from '@/data/why'
 import { Stagger, StaggerItem } from '@/motion/Stagger'
 import { duration, ease } from '@/motion/tokens'
@@ -56,7 +57,7 @@ export function WhyUs() {
       <div className="container-content relative">
         <SectionHeader
           layout="split"
-          index={7}
+          index={sectionIndex.why}
           id="why-title"
           eyebrow="Why choose us"
           title="One partner, from design to deployment."

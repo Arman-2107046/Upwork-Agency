@@ -56,6 +56,33 @@ class ManageHome extends SettingsPage
                 Tab::make('Process')->schema([
                     Fields::titledList('process_steps', 'Add step')->label('Process steps'),
                 ]),
+                Tab::make('Deployment')->schema([
+                    Grid::make(2)->schema([
+                        TextInput::make('deployment.eyebrow')->label('Eyebrow')->required()->maxLength(60),
+                        TextInput::make('deployment.title')->label('Title')->required()->maxLength(120),
+                        Textarea::make('deployment.intro')->label('Intro')->rows(3)->maxLength(400)->columnSpanFull(),
+                    ]),
+                    Section::make('Platforms')
+                        ->description('Groups of logos, such as Cloud or VPS. Remove every group to hide the section.')
+                        ->schema([
+                            Repeater::make('deployment.platform_groups')
+                                ->hiddenLabel()
+                                ->schema([
+                                    TextInput::make('label')->required()->maxLength(40),
+                                    Fields::technologies('items')->label('Platforms and tools')->required(),
+                                ])
+                                ->itemLabel(fn (array $state): ?string => $state['label'] ?? null)
+                                ->reorderableWithButtons()
+                                ->collapsible()
+                                ->defaultItems(0)
+                                ->addActionLabel('Add group'),
+                        ]),
+                    Section::make('Maintenance')
+                        ->description('What ongoing maintenance covers, shown next to the platforms.')
+                        ->schema([
+                            Fields::titledList('deployment.maintenance', 'Add item')->hiddenLabel(),
+                        ]),
+                ]),
                 Tab::make('Why us')->schema([
                     Repeater::make('why_items')
                         ->label('Reasons')

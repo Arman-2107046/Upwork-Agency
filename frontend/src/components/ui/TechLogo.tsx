@@ -1,6 +1,9 @@
 import {
+  Activity,
+  DatabaseBackup,
   GitMerge,
   Image as ImageIcon,
+  LockKeyhole,
   PenTool,
   Plug,
   Search,
@@ -18,6 +21,9 @@ const generic: Record<string, LucideIcon> = {
   SEO: Search,
   Photoshop: ImageIcon,
   Illustrator: PenTool,
+  SSL: LockKeyhole,
+  'Uptime monitoring': Activity,
+  Backups: DatabaseBackup,
 }
 
 /** Near-black brand colors disappear on the dark theme; those use the text color instead. */
@@ -44,17 +50,23 @@ export function TechLogo({
 }) {
   const brand = brandIcons[name]
   if (brand) {
-    const fill = mono || isDark(brand.hex) ? 'currentColor' : `#${brand.hex}`
+    const fill = (hex: string) => (mono || isDark(hex) ? 'currentColor' : `#${hex}`)
+    const viewBox = brand.viewBox ?? '0 0 24 24'
+    // Wide marks (the AWS wordmark) keep the height and grow sideways instead of shrinking.
+    const [, , w, h] = viewBox.split(' ').map(Number)
     return (
       <svg
-        viewBox="0 0 24 24"
-        width={size}
+        viewBox={viewBox}
+        width={Math.round(size * Math.max(1, w / h))}
         height={size}
         aria-hidden="true"
         focusable="false"
         className={cn('shrink-0', className)}
       >
-        <path d={brand.path} fill={fill} />
+        <path d={brand.path} fill={fill(brand.hex)} />
+        {brand.layers?.map((layer) => (
+          <path key={layer.path} d={layer.path} fill={fill(layer.hex)} />
+        ))}
       </svg>
     )
   }

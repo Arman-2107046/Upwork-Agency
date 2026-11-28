@@ -2,6 +2,7 @@ import { m, useScroll, useTransform } from 'framer-motion'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { TextLink } from '@/components/ui/TextLink'
+import { sectionIndex } from '@/data/home'
 import { featuredProjects } from '@/data/projects'
 import { PINNED, useMediaQuery } from '@/hooks/useMediaQuery'
 import { useMotionPreference } from '@/motion/useMotionPreference'
@@ -10,7 +11,7 @@ import { ProjectCard } from '../ProjectCard'
 const heading = (
   <SectionHeader
     id="work-title"
-    index={6}
+    index={sectionIndex.work}
     eyebrow="Selected work"
     title="Featured projects."
     mutedWords={1}

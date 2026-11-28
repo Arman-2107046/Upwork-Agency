@@ -16,7 +16,15 @@ final class Fields
     public const BRAND_LOGOS = [
         'React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'NestJS', 'Laravel',
         'PHP', 'Python', 'PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'n8n', 'Zapier', 'Make', 'Docker',
-        'Ubuntu VPS', 'Cloudflare', 'Blender', 'Three.js',
+        'Ubuntu VPS', 'Cloudflare', 'Blender', 'Three.js', 'AWS', 'Microsoft Azure', 'Google Cloud',
+        'DigitalOcean', 'Linode', 'Akamai', 'Vultr', 'Hetzner', 'Contabo', 'OVH', 'Hostinger', 'Namecheap',
+        'Ubuntu', 'Coolify', 'NGINX', 'Apache', 'Kubernetes', 'GitHub Actions', "Let's Encrypt", 'cPanel',
+        'Plesk', 'PM2', 'Uptime Kuma', 'Grafana',
+    ];
+
+    /** Technologies drawn with a line icon on the website (frontend/src/components/ui/TechLogo.tsx). */
+    public const GENERIC_LOGOS = [
+        'LLM APIs', 'CI/CD', 'APIs', 'SEO', 'Photoshop', 'Illustrator', 'SSL', 'Uptime monitoring', 'Backups',
     ];
 
     /** Image upload to the public disk. The website builds an 800px WebP variant automatically. */
@@ -47,12 +55,13 @@ final class Fields
         return TagsInput::make($name)
             ->reorderable()
             ->suggestions(fn () => collect(self::BRAND_LOGOS)
+                ->merge(self::GENERIC_LOGOS)
                 ->merge(TechnologyGroup::query()->pluck('items')->flatten())
                 ->unique()
                 ->sort()
                 ->values()
                 ->all())
-            ->helperText('Press Enter after each name. Names with a brand logo: '.implode(', ', self::BRAND_LOGOS).'.');
+            ->helperText('Press Enter after each name. The suggested names have a logo on the website.');
     }
 
     /** A reorderable list of { title, text } rows. */

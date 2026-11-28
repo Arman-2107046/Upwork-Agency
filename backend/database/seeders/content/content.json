@@ -141,6 +141,67 @@
           "sketch": "order"
         }
       ]
+    },
+    "deployment": {
+      "eyebrow": "Deployment & Maintenance",
+      "title": "Deployed where you need it, kept running after launch.",
+      "intro": "We set up servers on major clouds, VPS providers and shared hosting, ship your project with Docker and CI/CD, then keep it updated, monitored and backed up.",
+      "platform_groups": [
+        {
+          "label": "Cloud",
+          "items": [
+            "AWS",
+            "Microsoft Azure"
+          ]
+        },
+        {
+          "label": "VPS & IaaS",
+          "items": [
+            "Ubuntu VPS",
+            "Linode",
+            "Vultr"
+          ]
+        },
+        {
+          "label": "Hosting & domains",
+          "items": [
+            "Hostinger",
+            "Namecheap"
+          ]
+        },
+        {
+          "label": "Tooling",
+          "items": [
+            "Docker",
+            "Coolify",
+            "NGINX",
+            "CI/CD",
+            "Cloudflare"
+          ]
+        }
+      ],
+      "maintenance": [
+        {
+          "title": "Updates & security patches",
+          "text": "Server, framework and dependency updates, applied and tested."
+        },
+        {
+          "title": "Uptime monitoring",
+          "text": "Alerts when the site or API stops responding, so problems are fixed early."
+        },
+        {
+          "title": "Backups & recovery",
+          "text": "Automated database and file backups, with restores that are tested."
+        },
+        {
+          "title": "SSL & domains",
+          "text": "Certificates renewed automatically and DNS records kept in order."
+        },
+        {
+          "title": "Fixes & improvements",
+          "text": "Bug fixes, performance tuning and small updates after launch."
+        }
+      ]
     }
   },
   "about": {
