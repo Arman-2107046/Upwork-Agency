@@ -1,4 +1,11 @@
-import { m, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
+import {
+  m,
+  useMotionTemplate,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from 'framer-motion'
 import { useRef } from 'react'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { processSteps } from '@/data/process'
@@ -10,16 +17,15 @@ import { useMotionPreference } from '@/motion/useMotionPreference'
 
 const n = processSteps.length
 
-function Marker({
-  progress,
-  index,
-  reduced,
-}: {
-  progress: MotionValue<number>
-  index: number
-  reduced: boolean
-}) {
-  const at = index / (n - 1)
+type StepProps = { progress: MotionValue<number>; index: number; reduced: boolean }
+
+const pad = (v: number) => String(v).padStart(2, '0')
+
+/** Where a step sits on the 0–1 scroll progress of the list. */
+const stepAt = (index: number) => index / (n - 1)
+
+function Marker({ progress, index, reduced }: StepProps) {
+  const at = stepAt(index)
   const fill = useTransform(progress, [Math.max(0, at - 0.04), at], [0, 1])
   return (
     <span
@@ -31,6 +37,80 @@ function Marker({
         style={reduced ? undefined : { opacity: fill, scale: fill }}
       />
     </span>
+  )
+}
+
+/** Hairline that draws from the timeline toward the step once the line reaches it. */
+function Connector({ progress, index, reduced, left }: StepProps & { left: boolean }) {
+  const at = stepAt(index)
+  const scaleX = useTransform(progress, [Math.max(0, at - 0.02), at + 0.02], [0, 1])
+  return (
+    <m.span
+      aria-hidden="true"
+      className={cn(
+        'absolute top-[13px] hidden h-px w-10 bg-accent md:block',
+        left ? 'right-[calc(50%+0.75rem)] origin-right' : 'left-[calc(50%+0.75rem)] origin-left',
+      )}
+      style={reduced ? undefined : { scaleX }}
+    />
+  )
+}
+
+/**
+ * Oversized outlined step number on the far side of the line. Its accent outline fills
+ * bottom-up as the timeline approaches the step.
+ */
+function Numeral({ progress, index, reduced, left }: StepProps & { left: boolean }) {
+  const at = stepAt(index)
+  const inset = useTransform(progress, [Math.max(0, at - 0.14), at], [100, 0])
+  const clipPath = useMotionTemplate`inset(${inset}% 0 0 0)`
+  const label = pad(index + 1)
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        'relative hidden self-start font-display text-[clamp(5rem,2.5rem+6vw,8.5rem)] leading-[0.78] font-bold tabular-nums select-none md:block',
+        left
+          ? 'col-start-2 row-start-1 justify-self-start pl-16'
+          : 'col-start-1 row-start-1 justify-self-end pr-16',
+      )}
+    >
+      <span className="text-transparent [-webkit-text-stroke:1px_var(--line-strong)]">{label}</span>
+      <m.span
+        className={cn(
+          'absolute inset-y-0 text-[color-mix(in_srgb,var(--accent)_10%,transparent)] [-webkit-text-stroke:1px_var(--accent)]',
+          left ? 'left-16' : 'left-0',
+        )}
+        style={reduced ? undefined : { clipPath }}
+      >
+        {label}
+      </m.span>
+    </div>
+  )
+}
+
+/** Step copy: dimmed until the timeline reaches it. */
+function StepBody({
+  progress,
+  index,
+  reduced,
+  left,
+  children,
+}: StepProps & { left: boolean; children: React.ReactNode }) {
+  const at = stepAt(index)
+  const opacity = useTransform(progress, [Math.max(0, at - 0.1), at], [0.35, 1])
+  return (
+    <m.div
+      className={cn(
+        'row-start-1 max-w-md',
+        left
+          ? 'md:col-start-1 md:justify-self-end md:pr-16 md:text-right'
+          : 'md:col-start-2 md:pl-16',
+      )}
+      style={reduced ? undefined : { opacity }}
+    >
+      {children}
+    </m.div>
   )
 }
 
@@ -63,7 +143,7 @@ export function Process() {
           </p>
         </div>
 
-        <ol ref={listRef} className="relative mt-16 flex flex-col gap-14 md:gap-20">
+        <ol ref={listRef} className="relative mt-16 flex flex-col gap-14 md:mt-20 md:gap-24">
           {/* Uniform stroke without vector-effect so pathLength dashes map 1:1 to the line */}
           <svg
             aria-hidden="true"
@@ -89,21 +169,17 @@ export function Process() {
             return (
               <li key={step.title} className="relative grid pl-12 md:grid-cols-2 md:pl-0">
                 <Marker progress={progress} index={i} reduced={reduced} />
-                <Reveal
-                  direction={left ? 'right' : 'left'}
-                  className={cn(
-                    'max-w-md',
-                    left
-                      ? 'md:col-start-1 md:justify-self-end md:pr-16 md:text-right'
-                      : 'md:col-start-2 md:pl-16',
-                  )}
-                >
-                  <p className="font-mono text-xs text-accent-ink tabular-nums">
-                    {String(i + 1).padStart(2, '0')} / {String(n).padStart(2, '0')}
-                  </p>
-                  <h3 className="mt-3 text-title">{step.title}</h3>
-                  <p className="mt-3 text-muted">{step.text}</p>
-                </Reveal>
+                <Connector progress={progress} index={i} reduced={reduced} left={left} />
+                <Numeral progress={progress} index={i} reduced={reduced} left={left} />
+                <StepBody progress={progress} index={i} reduced={reduced} left={left}>
+                  <Reveal direction={left ? 'right' : 'left'}>
+                    <p className="font-mono text-xs text-accent-ink tabular-nums">
+                      {pad(i + 1)} / {pad(n)}
+                    </p>
+                    <h3 className="mt-3 text-title">{step.title}</h3>
+                    <p className="mt-3 text-muted">{step.text}</p>
+                  </Reveal>
+                </StepBody>
               </li>
             )
           })}
