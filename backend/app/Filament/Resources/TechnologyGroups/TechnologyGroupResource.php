@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TechnologyGroups;
 use App\Filament\Resources\TechnologyGroups\Pages\CreateTechnologyGroup;
 use App\Filament\Resources\TechnologyGroups\Pages\EditTechnologyGroup;
 use App\Filament\Resources\TechnologyGroups\Pages\ListTechnologyGroups;
+use App\Filament\Resources\TechnologyGroups\Pages\ViewTechnologyGroup;
 use App\Filament\Resources\TechnologyGroups\Schemas\TechnologyGroupForm;
 use App\Filament\Resources\TechnologyGroups\Tables\TechnologyGroupsTable;
 use App\Models\TechnologyGroup;
@@ -54,6 +55,7 @@ class TechnologyGroupResource extends Resource
             'index' => ListTechnologyGroups::route('/'),
             'create' => CreateTechnologyGroup::route('/create'),
             'edit' => EditTechnologyGroup::route('/{record}/edit'),
+            'view' => ViewTechnologyGroup::route('/{record}'),
         ];
     }
 }

@@ -18,7 +18,13 @@ class SitemapController extends Controller
             ...array_map(fn ($p) => "/work/{$p['slug']}", $content['projects']),
         ], $today);
         foreach ($content['posts'] as $post) {
-            $paths["/blog/{$post['slug']}"] = substr($post['updatedAt'] ?? $post['publishedAt'], 0, 10);
+            $date = substr($post['updatedAt'] ?? $post['publishedAt'], 0, 10);
+            $paths["/blog/{$post['slug']}"] = $date;
+            // A category page changes when one of its posts does.
+            $category = "/blog/category/{$post['categorySlug']}";
+            if ($post['categorySlug'] !== '' && ($paths[$category] ?? '') < $date) {
+                $paths[$category] = $date;
+            }
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n"

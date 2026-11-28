@@ -18,7 +18,7 @@ class ContentApiTest extends TestCase
 
         $this->getJson('/api/content')
             ->assertOk()
-            ->assertJsonPath('site.brandName', 'Bytecode Software Labs')
+            ->assertJsonPath('site.brandName', 'Kernel Cloud Labs')
             ->assertJsonPath('site.siteUrl', 'https://bytecode.test')
             ->assertJsonPath('site.claims.yearsExperience', '17+')
             ->assertJsonCount(7, 'projects')
@@ -45,11 +45,11 @@ class ContentApiTest extends TestCase
         $this->getJson('/api/content')->assertJsonPath('projects.0.title', 'CustomTailor.store');
 
         Project::query()->where('slug', 'customtailor')->first()->update(['title' => 'CustomTailor']);
-        Setting::putGroup('site', [...Setting::group('site'), 'brand_name' => 'Bytecode Labs']);
+        Setting::putGroup('site', [...Setting::group('site'), 'brand_name' => 'Kernel Labs']);
 
         $this->getJson('/api/content')
             ->assertJsonPath('projects.0.title', 'CustomTailor')
-            ->assertJsonPath('site.brandName', 'Bytecode Labs');
+            ->assertJsonPath('site.brandName', 'Kernel Labs');
     }
 
     public function test_unpublished_records_and_disabled_claims_are_hidden(): void

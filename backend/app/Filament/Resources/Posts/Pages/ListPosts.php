@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources\Posts\Pages;
 
+use App\Filament\Resources\Posts\PostExport;
 use App\Filament\Resources\Posts\PostResource;
+use App\Filament\Resources\Posts\Tables\PostsTable;
 use App\Models\Post;
+use Filament\Actions\Action;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListPosts extends ListRecords
@@ -16,6 +20,20 @@ class ListPosts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('reload')
+                ->label('Reload')
+                ->icon(Heroicon::OutlinedArrowPath)
+                ->color('gray')
+                ->action(fn () => $this->resetTable()),
+            Action::make('export')
+                ->label('Export')
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->color('gray')
+                ->modalHeading('Export posts')
+                ->modalDescription('Every post matching the current tab, search and filters.')
+                ->schema([PostsTable::formatField()])
+                ->modalSubmitActionLabel('Download')
+                ->action(fn (array $data) => PostExport::download($this->getFilteredTableQuery()->clone(), $data['format'])),
             CreateAction::make()->label('Write a post'),
         ];
     }

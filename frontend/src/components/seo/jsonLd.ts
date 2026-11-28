@@ -48,7 +48,9 @@ export function blogPostingJsonLd(post: Post) {
     description: post.excerpt,
     url,
     mainEntityOfPage: url,
-    ...(post.cover.src ? { image: absoluteUrl(post.cover.src) } : {}),
+    ...(post.cover.src
+      ? { image: post.cover.src.startsWith('http') ? post.cover.src : absoluteUrl(post.cover.src) }
+      : {}),
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
     articleSection: post.category,

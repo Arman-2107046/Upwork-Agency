@@ -144,13 +144,28 @@ export interface PostSummary {
   category: string
   categorySlug: string
   tags: string[]
+  /** The uploaded cover, else the first image in the article (no src: a branded placeholder). */
   cover: ImageAsset
+  /** Caption or credit shown under the cover. */
+  coverCaption?: string
   /** ISO 8601. */
   publishedAt: string
   updatedAt?: string
   readingMinutes: number
   featured: boolean
   author?: PostAuthor
+}
+
+/** A blog category with live posts (Content > Blog posts > Categories in the admin). */
+export interface BlogCategory {
+  slug: string
+  name: string
+  /** Shown at the top of the category page. */
+  description?: string
+  seoTitle?: string
+  seoDescription?: string
+  /** Live posts in the category. */
+  count: number
 }
 
 export interface TocItem {
@@ -166,8 +181,20 @@ export interface Post extends PostSummary {
   toc: TocItem[]
   seoTitle: string
   seoDescription: string
+  /** The generated 1200×630 link preview card (root-relative). */
+  shareImage?: string
   /** True for drafts and scheduled posts opened through an admin preview link. */
   draft: boolean
+  /** Approved comments, oldest first. */
+  comments: PostCommentItem[]
+}
+
+export interface PostCommentItem {
+  id: number
+  name: string
+  body: string
+  /** ISO 8601. */
+  date: string
 }
 
 export interface SiteContent {
@@ -194,4 +221,6 @@ export interface SiteContent {
   sliderRows: TechGroup[]
   /** Live blog posts, newest first. */
   posts: PostSummary[]
+  /** Categories with live posts, in the admin's order. */
+  categories: BlogCategory[]
 }

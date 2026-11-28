@@ -12,7 +12,7 @@ final class PageMeta
     /**
      * @param  array<string, mixed>  $content  SiteContent::get()
      * @param  array<string, mixed>|null  $post  PostPayload::full() of the post at /blog/{slug}, when there is one
-     * @return array{status: int, title: string, description: string, path: string, type: string, noindex: bool, jsonLd: list<array<string, mixed>>, image: string|null, article: array<string, mixed>|null}
+     * @return array{status: int, title: string, description: string, path: string, type: string, noindex: bool, jsonLd: list<array<string, mixed>>, image: string|null, imageIsCard: bool, article: array<string, mixed>|null}
      */
     public static function for(string $path, array $content, ?array $post = null): array
     {
@@ -36,6 +36,7 @@ final class PageMeta
             count($segments) === 2 && $segments[0] === 'services' => self::service($segments[1], $content),
             count($segments) === 2 && $segments[0] === 'work' => self::project($segments[1], $content),
             count($segments) === 2 && $segments[0] === 'blog' && $post && $post['slug'] === $segments[1] => self::post($post, $content),
+            count($segments) === 3 && $segments[0] === 'blog' && $segments[1] === 'category' => self::category($segments[2], $content),
             default => self::notFound($content),
         };
     }
@@ -93,7 +94,10 @@ final class PageMeta
     {
         $siteUrl = $content['site']['siteUrl'];
         $url = "{$siteUrl}/blog/{$post['slug']}";
-        $image = isset($post['cover']['src']) ? $siteUrl.$post['cover']['src'] : null;
+        $cover = $post['cover']['src'] ?? null;
+        $cover = $cover && ! str_starts_with($cover, 'http') ? $siteUrl.$cover : $cover;
+        // The generated 1200×630 share card (title, category, author, cover) for link previews.
+        $image = isset($post['shareImage']) ? $siteUrl.$post['shareImage'] : $cover;
 
         $meta = self::meta($content, $post['seoTitle'], $post['seoDescription'], "/blog/{$post['slug']}",
             type: 'article', noindex: $post['draft'], jsonLd: [
@@ -104,7 +108,7 @@ final class PageMeta
                     'description' => $post['excerpt'],
                     'url' => $url,
                     'mainEntityOfPage' => $url,
-                    'image' => $image,
+                    'image' => array_values(array_filter([$cover, $image])),
                     'datePublished' => $post['publishedAt'],
                     'dateModified' => $post['updatedAt'] ?? $post['publishedAt'],
                     'articleSection' => $post['category'],
@@ -119,6 +123,7 @@ final class PageMeta
         return [
             ...$meta,
             'image' => $image,
+            'imageIsCard' => isset($post['shareImage']),
             'article' => [
                 'publishedTime' => $post['publishedAt'],
                 'modifiedTime' => $post['updatedAt'] ?? $post['publishedAt'],
@@ -127,6 +132,50 @@ final class PageMeta
                 'author' => $post['author']['name'] ?? null,
             ],
         ];
+    }
+
+    private static function category(string $slug, array $content): array
+    {
+        $category = collect($content['categories'] ?? [])->firstWhere('slug', $slug);
+        if (! $category) {
+            return self::notFound($content);
+        }
+        $siteUrl = $content['site']['siteUrl'];
+        $url = "{$siteUrl}/blog/category/{$slug}";
+        $description = self::categoryDescription($category, $content);
+        $posts = array_values(array_filter($content['posts'] ?? [], fn ($p) => $p['categorySlug'] === $slug));
+
+        return self::meta($content, $category['seoTitle'] ?? "{$category['name']} articles", $description, "/blog/category/{$slug}", jsonLd: [
+            [
+                '@context' => 'https://schema.org',
+                '@type' => 'CollectionPage',
+                'name' => "{$category['name']} articles",
+                'description' => $description,
+                'url' => $url,
+                'isPartOf' => ['@type' => 'Blog', 'name' => "{$content['site']['brandName']} Blog", 'url' => "{$siteUrl}/blog"],
+                'hasPart' => array_map(fn ($p) => [
+                    '@type' => 'BlogPosting',
+                    'headline' => $p['title'],
+                    'url' => "{$siteUrl}/blog/{$p['slug']}",
+                    'datePublished' => $p['publishedAt'],
+                ], array_slice($posts, 0, 20)),
+            ],
+            [
+                '@context' => 'https://schema.org',
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => [
+                    ['@type' => 'ListItem', 'position' => 1, 'name' => 'Blog', 'item' => "{$siteUrl}/blog"],
+                    ['@type' => 'ListItem', 'position' => 2, 'name' => $category['name'], 'item' => $url],
+                ],
+            ],
+        ]);
+    }
+
+    /** Mirrors categoryDescription() in frontend/src/data/posts.ts. @param array<string, mixed> $category */
+    private static function categoryDescription(array $category, array $content): string
+    {
+        return $category['seoDescription'] ?? $category['description']
+            ?? "Articles on {$category['name']} from the {$content['site']['brandName']} team.";
     }
 
     private static function blogJsonLd(array $content): array
@@ -193,6 +242,7 @@ final class PageMeta
             'noindex' => $noindex,
             'jsonLd' => $jsonLd,
             'image' => null,
+            'imageIsCard' => false,
             'article' => null,
         ];
     }

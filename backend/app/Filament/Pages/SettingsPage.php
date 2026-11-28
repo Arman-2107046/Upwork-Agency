@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Content\SiteContent;
+use App\Filament\Support\Access;
 use App\Models\Setting;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -42,7 +43,7 @@ abstract class SettingsPage extends Page
 
     public function form(Schema $schema): Schema
     {
-        return $schema->statePath('data')->components($this->fields());
+        return $schema->statePath('data')->components($this->fields())->disabled(! Access::canWrite());
     }
 
     public function content(Schema $schema): Schema
@@ -56,7 +57,8 @@ abstract class SettingsPage extends Page
                         Action::make('save')
                             ->label('Save changes')
                             ->submit('save')
-                            ->keyBindings(['mod+s']),
+                            ->keyBindings(['mod+s'])
+                            ->visible(Access::canWrite()),
                         Action::make('view')
                             ->label('View website')
                             ->color('gray')
@@ -68,6 +70,7 @@ abstract class SettingsPage extends Page
 
     public function save(): void
     {
+        abort_unless(Access::canWrite(), 403);
         Setting::putGroup(static::settingsKey(), $this->form->getState());
 
         Notification::make()->success()->title('Saved. The website shows the changes now.')->send();

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['name', 'email', 'company', 'service', 'budget', 'message', 'ip_address', 'user_agent', 'read_at'])]
 class ContactMessage extends Model
 {
+    use RecordsActivity;
+
+    /** Only deleting a message is logged (reading one is not a change). */
+    protected array $activityOnly = [];
+
     /** Budget choices on the contact form (keep in sync with frontend/src/lib/validators.ts). */
     public const BUDGETS = [
         'Not sure yet',
@@ -21,6 +27,11 @@ class ContactMessage extends Model
     protected function casts(): array
     {
         return ['read_at' => 'datetime'];
+    }
+
+    public function activityLabel(): string
+    {
+        return "Message from {$this->name}";
     }
 
     /** @param Builder<ContactMessage> $query */

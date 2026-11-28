@@ -9,6 +9,8 @@ export interface SeoProps {
   /** Route path, used for the canonical URL. */
   path: string
   image?: string
+  /** The image is a generated 1200×630 share card. */
+  imageIsCard?: boolean
   type?: 'website' | 'article'
   noindex?: boolean
   /** Route-level structured data. */
@@ -32,6 +34,7 @@ export function Seo({
   description,
   path,
   image = '/og-image.png',
+  imageIsCard = false,
   type = 'website',
   noindex = false,
   jsonLd,
@@ -54,8 +57,12 @@ export function Seo({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:image" content={img} />
-      {image === '/og-image.png' ? <meta property="og:image:width" content="1200" /> : null}
-      {image === '/og-image.png' ? <meta property="og:image:height" content="630" /> : null}
+      {image === '/og-image.png' || imageIsCard ? (
+        <meta property="og:image:width" content="1200" />
+      ) : null}
+      {image === '/og-image.png' || imageIsCard ? (
+        <meta property="og:image:height" content="630" />
+      ) : null}
       {article ? <meta property="article:published_time" content={article.publishedTime} /> : null}
       {article ? (
         <meta

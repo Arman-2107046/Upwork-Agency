@@ -48,14 +48,14 @@ class AdminTest extends TestCase
     public function test_site_settings_save_and_show_on_the_website(): void
     {
         Livewire::test(ManageSite::class)
-            ->fillForm(['brand_name' => 'Bytecode Labs', 'email' => 'hello@bytecode.test'])
+            ->fillForm(['brand_name' => 'Kernel Labs', 'email' => 'hello@bytecode.test'])
             ->call('save')
             ->assertHasNoFormErrors();
 
         $this->getJson('/api/content')
-            ->assertJsonPath('site.brandName', 'Bytecode Labs')
+            ->assertJsonPath('site.brandName', 'Kernel Labs')
             ->assertJsonPath('site.email', 'hello@bytecode.test')
-            ->assertJsonPath('site.handle', 'bytecode@labs');
+            ->assertJsonPath('site.handle', 'kernel@labs');
     }
 
     public function test_home_page_settings_keep_their_lists(): void

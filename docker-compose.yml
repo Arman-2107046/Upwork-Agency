@@ -19,7 +19,7 @@ services:
       - SERVICE_URL_APP_8080
       - APP_URL=${SERVICE_URL_APP}
       - APP_KEY=${SERVICE_PASSWORD_APPKEY}
-      - APP_NAME=${APP_NAME:-Bytecode Software Labs}
+      - APP_NAME=${APP_NAME:-Kernel Cloud Labs}
       - APP_ENV=${APP_ENV:-production}
       - APP_DEBUG=${APP_DEBUG:-false}
       - DB_CONNECTION=pgsql
@@ -45,7 +45,7 @@ services:
       - MAIL_PASSWORD=${MAIL_PASSWORD:-}
       - MAIL_SCHEME=${MAIL_SCHEME:-}
       - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS:-hello@example.com}
-      - MAIL_FROM_NAME=${MAIL_FROM_NAME:-Bytecode Software Labs}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME:-Kernel Cloud Labs}
       - CONTACT_NOTIFY_EMAIL=${CONTACT_NOTIFY_EMAIL:-}
     volumes:
       # Uploaded images and videos (and the original screenshots, copied on start).

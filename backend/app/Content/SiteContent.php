@@ -160,10 +160,18 @@ final class SiteContent
                     ], fn ($v) => $v !== null) : null,
                 ], fn ($v) => $v !== null))->values()->all(),
             ...$this->technologies(),
-            'posts' => Post::query()->live()->with('author')->get()
-                ->map(fn (Post $post) => PostPayload::summary($post))
-                ->values()
-                ->all(),
+            ...$this->blog(),
+        ];
+    }
+
+    /** @return array{posts: list<array<string, mixed>>, categories: list<array<string, mixed>>} */
+    private function blog(): array
+    {
+        $posts = Post::query()->live()->with(['author', 'category'])->get();
+
+        return [
+            'posts' => $posts->map(fn (Post $post) => PostPayload::summary($post))->values()->all(),
+            'categories' => PostPayload::categories($posts),
         ];
     }
 

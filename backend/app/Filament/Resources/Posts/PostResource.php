@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Posts;
 use App\Filament\Resources\Posts\Pages\CreatePost;
 use App\Filament\Resources\Posts\Pages\EditPost;
 use App\Filament\Resources\Posts\Pages\ListPosts;
+use App\Filament\Resources\Posts\Pages\ViewPost;
 use App\Filament\Resources\Posts\Schemas\PostForm;
 use App\Filament\Resources\Posts\Tables\PostsTable;
 use App\Models\Post;
@@ -31,6 +32,15 @@ class PostResource extends Resource
     protected static ?int $navigationSort = 0;
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    /** Admin links use the post's address: /admin/posts/{slug}/edit (the website's Edit button builds them). */
+    protected static ?string $recordRouteKeyName = 'slug';
+
+    /** @return list<string> */
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'slug', 'excerpt'];
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -68,6 +78,7 @@ class PostResource extends Resource
             'index' => ListPosts::route('/'),
             'create' => CreatePost::route('/create'),
             'edit' => EditPost::route('/{record}/edit'),
+            'view' => ViewPost::route('/{record}'),
         ];
     }
 }

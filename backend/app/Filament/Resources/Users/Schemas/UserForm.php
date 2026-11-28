@@ -3,10 +3,13 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use App\Filament\Support\Fields;
+use App\Models\User;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
 class UserForm
@@ -35,6 +38,19 @@ class UserForm
                             ->revealable()
                             ->required(fn (string $operation): bool => $operation === 'create')
                             ->dehydrated(false),
+                    ]),
+                Section::make('Role')
+                    ->columnSpanFull()
+                    ->schema([
+                        Radio::make('role')
+                            ->hiddenLabel()
+                            ->options(User::ROLES)
+                            ->descriptions(User::ROLE_DESCRIPTIONS)
+                            ->default(User::EDITOR)
+                            ->required()
+                            // Nobody changes their own role, so the admin always keeps an admin.
+                            ->disabled(fn (?User $record): bool => $record?->is(Auth::user()) ?? false)
+                            ->helperText(fn (?User $record): ?string => $record?->is(Auth::user()) ? 'You cannot change your own role.' : null),
                     ]),
                 Section::make('Author profile')
                     ->description('Shown on the blog posts this person writes.')

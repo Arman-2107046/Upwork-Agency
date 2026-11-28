@@ -124,14 +124,29 @@ function FooterLink({
   )
 }
 
-/** Oversized "bytecode." signature that rises into view. Decorative: the name is in the lockup. */
+/**
+ * Width of the wordmark in em, per character (measured on the sans display weight), so the
+ * signature can be sized to fill the container whatever the short name is.
+ */
+const SIGNATURE_EM = { k: 0.56, e: 0.55, r: 0.37, n: 0.57, l: 0.25, '.': 0.27 } as Record<
+  string,
+  number
+>
+const signatureSize = (() => {
+  const text = `${site.shortName.toLowerCase()}.`
+  const em = [...text].reduce((sum, ch) => sum + (SIGNATURE_EM[ch] ?? 0.55), 0)
+  return `${Math.min(40, 109 / em).toFixed(2)}cqw`
+})()
+
+/** Oversized wordmark signature (e.g. "kernel.") that rises into view. Decorative: the name is in the lockup. */
 function Signature() {
   const pref = useMotionPreference()
   return (
     <div aria-hidden="true" className="@container overflow-hidden pt-6">
       <m.div
-        // Sized to the container (cqw) so "bytecode." always spans the full content width.
-        className="text-[23.2cqw] leading-[1.04] select-none"
+        // Sized to the container (cqw) so the wordmark always spans the full content width.
+        style={{ fontSize: signatureSize }}
+        className="leading-[1.04] select-none"
         initial={pref === 'full' ? { y: '60%', opacity: 0 } : false}
         whileInView={{ y: '0%', opacity: 1 }}
         viewport={{ once: true, amount: 0.3 }}

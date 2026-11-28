@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\FlushesSiteContent;
 use App\Models\Concerns\HasSortOrder;
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class Service extends Model
 {
-    use FlushesSiteContent, HasSortOrder;
+    use FlushesSiteContent, HasSortOrder, RecordsActivity;
 
     /** Icons the website can draw (see frontend/src/components/ui/ServiceIcon.tsx). */
     public const ICONS = [

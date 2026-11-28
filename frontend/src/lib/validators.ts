@@ -32,3 +32,23 @@ export const contactSchema = z.object({
 })
 
 export type ContactValues = z.infer<typeof contactSchema>
+
+/** Keep in sync with PostEngagementController::comment in the backend. */
+export const commentSchema = z.object({
+  name: z.string().trim().min(1, 'Enter your name.').max(120, 'Use 120 characters or fewer.'),
+  email: z
+    .string()
+    .trim()
+    .min(1, 'Enter your email address. It is never shown.')
+    .max(255)
+    .pipe(z.email('Check the email address. It should look like name@company.com.')),
+  body: z
+    .string()
+    .trim()
+    .min(3, 'Write at least a few words.')
+    .max(2000, 'Keep it under 2,000 characters.'),
+  /** Honeypot: humans never see or fill it. */
+  website: z.string().optional(),
+})
+
+export type CommentValues = z.infer<typeof commentSchema>

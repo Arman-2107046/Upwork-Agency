@@ -1,8 +1,8 @@
 {
   "site": {
-    "brand_name": "Bytecode Software Labs",
-    "short_name": "Bytecode",
-    "handle": "bytecode@labs",
+    "brand_name": "Kernel Cloud Labs",
+    "short_name": "Kernel",
+    "handle": "kernel@labs",
     "tagline": "Web Development, E-commerce, AI Automation & Digital Design",
     "description": "We design, develop, and deliver professional websites, e-commerce platforms, interactive product configurators, SaaS applications, enterprise software, AI chatbots, and workflow automation, from database to live deployment.",
     "email": "",
@@ -16,7 +16,7 @@
   },
   "pages": {
     "home": {
-      "title": "Bytecode Software Labs | Web, E-commerce & AI Automation",
+      "title": "Kernel Cloud Labs | Web, E-commerce & AI Automation",
       "description": "Websites, e-commerce, product configurators, SaaS, AI chatbots and workflow automation, designed and built end to end."
     },
     "services": {
@@ -29,11 +29,11 @@
     },
     "blog": {
       "title": "Blog",
-      "description": "Articles from Bytecode Software Labs on web development, e-commerce, product configurators, AI chatbots and workflow automation."
+      "description": "Articles from Kernel Cloud Labs on web development, e-commerce, product configurators, AI chatbots and workflow automation."
     },
     "about": {
       "title": "About",
-      "description": "Bytecode Software Labs is a multidisciplinary design and development agency: graphic designers, frontend developers and backend developers in one team."
+      "description": "Kernel Cloud Labs is a multidisciplinary design and development agency: graphic designers, frontend developers and backend developers in one team."
     },
     "contact": {
       "title": "Contact",
@@ -144,7 +144,7 @@
     }
   },
   "about": {
-    "statement": "Bytecode Software Labs is a multidisciplinary design and development agency combining 17+ years of creative design expertise with modern web development. Our team includes graphic designers, frontend developers, and backend developers.",
+    "statement": "Kernel Cloud Labs is a multidisciplinary design and development agency combining 17+ years of creative design expertise with modern web development. Our team includes graphic designers, frontend developers, and backend developers.",
     "closing_line": "Let's build something exceptional together!",
     "how_we_work": [
       {

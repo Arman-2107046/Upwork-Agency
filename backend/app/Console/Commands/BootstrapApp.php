@@ -40,6 +40,7 @@ class BootstrapApp extends Command
                     'name' => $admin['name'],
                     'email' => $admin['email'],
                     'password' => $admin['password'],
+                    'role' => User::ADMIN,
                     'email_verified_at' => now(),
                 ]);
                 $this->components->info("Admin user {$admin['email']} created.");

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Services\Tables;
 
+use App\Filament\Support\Access;
 use App\Models\Service;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -31,7 +32,7 @@ class ServicesTable
                     ->state(fn (Service $record): int => count($record->bullets ?? []))
                     ->badge()
                     ->color('gray'),
-                ToggleColumn::make('is_published')->label('Published'),
+                ToggleColumn::make('is_published')->label('Published')->disabled(fn (): bool => ! Access::canWrite()),
             ])
             ->recordActions([
                 Action::make('view')

@@ -2,8 +2,8 @@ import { site } from '@/config/site'
 import { cn } from '@/lib/cn'
 
 /**
- * Bytecode logo system (see the brand sheet): a prompt chevron and cursor in a rounded tile,
- * the lowercase "bytecode" wordmark, and a lockup of the two with the full name kept small.
+ * Logo system: a prompt chevron and cursor in a rounded tile, the lowercase wordmark (the
+ * short name, e.g. "kernel"), and a lockup of the two with the full name kept small.
  * Colors follow the theme: dark tile on light pages, light tile on dark pages; the cursor and
  * the wordmark dot are always the accent blue.
  */
@@ -43,7 +43,7 @@ export function LogoSymbol({ size = 40, className }: { size?: number; className?
   )
 }
 
-/** Type-only mark: "bytecode." where the blue dot is the brand. */
+/** Type-only mark: the short name with a blue dot, e.g. "kernel.". */
 export function LogoWordmark({ className }: { className?: string }) {
   return (
     <span className={cn('font-sans font-semibold tracking-[-0.045em] lowercase', className)}>

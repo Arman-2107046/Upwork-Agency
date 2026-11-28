@@ -1,7 +1,8 @@
 import { getContent } from '@/content/load'
-import type { Post, PostAuthor, PostSummary, TocItem } from '@/content/types'
+import { site } from '@/config/site'
+import type { BlogCategory, Post, PostAuthor, PostSummary, TocItem } from '@/content/types'
 
-export type { Post, PostAuthor, PostSummary, TocItem }
+export type { BlogCategory, Post, PostAuthor, PostSummary, TocItem }
 
 /** Live blog posts, newest first (Content > Blog posts in the admin). */
 export const posts: PostSummary[] = getContent().posts ?? []
@@ -15,14 +16,23 @@ export function getPostSummary(slug: string | undefined): PostSummary | undefine
 /** The post that leads the blog page: the newest featured one, else the newest. */
 export const leadPost: PostSummary | undefined = posts.find((p) => p.featured) ?? posts[0]
 
-/** Categories in use, most posts first. */
-export const categories: { slug: string; label: string; count: number }[] = Object.values(
-  posts.reduce<Record<string, { slug: string; label: string; count: number }>>((acc, p) => {
-    const entry = (acc[p.categorySlug] ??= { slug: p.categorySlug, label: p.category, count: 0 })
-    entry.count += 1
-    return acc
-  }, {}),
-).sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+/** Categories with live posts, in the order set in the admin. */
+export const categories: BlogCategory[] = getContent().categories ?? []
+
+export const categoryPath = (slug: string) => (slug ? `/blog/category/${slug}` : '/blog')
+
+export function getCategory(slug: string | undefined): BlogCategory | undefined {
+  return categories.find((c) => c.slug === slug)
+}
+
+/** Mirrors categoryDescription() in backend/app/Content/PageMeta.php. */
+export function categoryDescription(category: BlogCategory): string {
+  return (
+    category.seoDescription ??
+    category.description ??
+    `Articles on ${category.name} from the ${site.brandName} team.`
+  )
+}
 
 /** Up to `limit` posts to read next: same category first, then shared tags, then newest. */
 export function relatedPosts(post: PostSummary, limit = 3): PostSummary[] {

@@ -41,7 +41,7 @@ class ManageSite extends SettingsPage
                     TextInput::make('short_name')->required()->maxLength(40)
                         ->helperText('Used where space is tight.'),
                     TextInput::make('handle')->required()->maxLength(40)
-                        ->helperText('Terminal-style prompt above page headings, e.g. bytecode@labs.'),
+                        ->helperText('Terminal-style prompt above page headings, e.g. kernel@labs.'),
                     ColorPicker::make('theme_color')->required()
                         ->helperText('Browser bar color on mobile.'),
                     TextInput::make('tagline')->required()->maxLength(160)->columnSpanFull(),

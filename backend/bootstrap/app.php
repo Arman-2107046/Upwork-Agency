@@ -15,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Coolify (Traefik) terminates TLS in front of the container.
         $middleware->trustProxies(at: '*');
+        // The blog's reader cookie (likes) is set by the API, unencrypted, and holds no secret.
+        $middleware->encryptCookies(except: ['reader']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

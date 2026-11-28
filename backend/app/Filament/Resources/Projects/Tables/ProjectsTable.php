@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Projects\Tables;
 
+use App\Filament\Support\Access;
 use App\Models\Project;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -38,8 +39,8 @@ class ProjectsTable
                     ->url(fn (Project $record): ?string => $record->url, shouldOpenInNewTab: true)
                     ->color('gray')
                     ->toggleable(),
-                ToggleColumn::make('is_featured')->label('Home page'),
-                ToggleColumn::make('is_published')->label('Published'),
+                ToggleColumn::make('is_featured')->label('Home page')->disabled(fn (): bool => ! Access::canWrite()),
+                ToggleColumn::make('is_published')->label('Published')->disabled(fn (): bool => ! Access::canWrite()),
                 TextColumn::make('updated_at')->label('Updated')->since()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

@@ -14,12 +14,13 @@ class FeedController extends Controller
         $content = SiteContent::get();
         $site = $content['site'];
         $base = $site['siteUrl'];
-        $posts = Post::query()->live()->with('author')->limit(30)->get();
+        $posts = Post::query()->live()->with(['author', 'category'])->limit(30)->get();
 
         $items = $posts->map(function (Post $post) use ($base): string {
             $url = e("{$base}/blog/{$post->slug}");
             $image = $post->cover_image ? '<enclosure url="'.e($base.'/storage/'.$post->cover_image).'" type="'.e(self::mime($post->cover_image)).'" length="0" />' : '';
-            $categories = collect([$post->category, ...($post->tags ?? [])])
+            $categories = collect([$post->category?->name, ...($post->tags ?? [])])
+                ->filter()
                 ->unique()
                 ->map(fn ($c) => '<category>'.e($c).'</category>')
                 ->implode('');

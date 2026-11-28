@@ -6,6 +6,7 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
+use Filament\Forms\Components\RichEditor\TextColor;
 use Illuminate\Support\Str;
 
 /**
@@ -17,8 +18,29 @@ final class PostBody
 {
     private const WORDS_PER_MINUTE = 225;
 
-    /** @return array{html: string, toc: list<array{id: string, text: string, level: int}>, minutes: int} */
-    public static function render(?string $body): array
+    /**
+     * Text colours offered in the editor, in the brand palette. The website styles them with the
+     * --color / --dark-color variables the renderer writes.
+     *
+     * @return array<string, TextColor>
+     */
+    public static function textColors(): array
+    {
+        return [
+            'brand' => TextColor::make('Brand blue', '#1F6BFF', '#6EA0FF'),
+            'ink' => TextColor::make('Ink', '#0B0B0C', '#F4F4F5'),
+            'muted' => TextColor::make('Muted', '#6B6B73', '#A1A1AA'),
+            'green' => TextColor::make('Green', '#15803D', '#4ADE80'),
+            'amber' => TextColor::make('Amber', '#B45309', '#FBBF24'),
+            'red' => TextColor::make('Red', '#B91C1C', '#F87171'),
+        ];
+    }
+
+    /**
+     * @param  string|array<string, mixed>|null  $body  editor HTML, or the editor's live document
+     * @return array{html: string, toc: list<array{id: string, text: string, level: int}>, minutes: int}
+     */
+    public static function render(string|array|null $body): array
     {
         if (blank($body)) {
             return ['html' => '', 'toc' => [], 'minutes' => 1];
@@ -27,6 +49,7 @@ final class PostBody
         $html = RichContentRenderer::make($body)
             ->fileAttachmentsDisk('public')
             ->fileAttachmentsVisibility('public')
+            ->textColors(self::textColors())
             ->toHtml();
 
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -141,6 +164,11 @@ final class PostBody
 
         foreach ($xpath->query('.//a[@href]', $root) as $link) {
             /** @var DOMElement $link */
+            if (preg_match('/^\s*(?:javascript|vbscript|data):/i', $link->getAttribute('href'))) {
+                $link->removeAttribute('href');
+
+                continue;
+            }
             $host = parse_url($link->getAttribute('href'), PHP_URL_HOST);
             if ($host && $host !== $siteHost) {
                 $link->setAttribute('target', '_blank');

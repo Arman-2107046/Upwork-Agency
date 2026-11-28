@@ -6,6 +6,7 @@ import { cn } from '@/lib/cn'
 import { ImageReveal } from '@/motion/ImageReveal'
 import { preloadRoute } from '@/routes/preload'
 import { PostDate, PostEyebrow } from './PostMeta'
+import { StaffEditPencil } from './StaffEdit'
 
 interface PostCardProps {
   post: PostSummary
@@ -30,6 +31,7 @@ export function PostCard({ post, className, headingLevel = 'h3', priority }: Pos
           />
         </div>
       </ImageReveal>
+      <StaffEditPencil slug={post.slug} title={post.title} />
       <PostEyebrow post={post} className="mt-6" />
       <Heading className="mt-3 text-title">
         <Link

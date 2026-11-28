@@ -7,7 +7,6 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 
 class UsersTable
 {
@@ -17,12 +16,20 @@ class UsersTable
             ->columns([
                 TextColumn::make('name')->searchable()->weight('medium'),
                 TextColumn::make('email')->searchable()->copyable(),
+                TextColumn::make('role')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => User::ROLES[$state] ?? $state)
+                    ->color(fn (string $state): string => match ($state) {
+                        User::ADMIN => 'primary',
+                        User::EDITOR => 'success',
+                        default => 'gray',
+                    }),
                 TextColumn::make('created_at')->label('Added')->date()->sortable(),
             ])
             ->recordActions([
                 EditAction::make(),
-                // Nobody can delete their own account, so the admin can never be left without a user.
-                DeleteAction::make()->hidden(fn (User $record): bool => $record->is(Auth::user())),
+                // Nobody can delete their own account (UserPolicy), so the admin is never left without a user.
+                DeleteAction::make(),
             ]);
     }
 }

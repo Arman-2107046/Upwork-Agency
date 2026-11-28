@@ -20,15 +20,15 @@ class WebsiteTest extends TestCase
     {
         $this->get('/work/customtailor')
             ->assertOk()
-            ->assertSee('<title>CustomTailor.store | Bytecode Software Labs</title>', false)
+            ->assertSee('<title>CustomTailor.store | Kernel Cloud Labs</title>', false)
             ->assertSee('<link rel="canonical" data-rh="true" href="https://bytecode.test/work/customtailor" />', false)
             ->assertSee('<meta property="og:type" data-rh="true" content="article" />', false)
             ->assertSee('"@type":"CreativeWork"', false)
             ->assertSee('<script id="site-content" type="application/json">{"site":', false);
 
-        $this->get('/')->assertOk()->assertSee('<title>Bytecode Software Labs | Web, E-commerce &amp; AI Automation</title>', false);
+        $this->get('/')->assertOk()->assertSee('<title>Kernel Cloud Labs | Web, E-commerce &amp; AI Automation</title>', false);
         $this->get('/services/e-commerce')->assertOk()->assertSee('"@type":"Service"', false);
-        $this->get('/contact')->assertOk()->assertSee('<title>Contact | Bytecode Software Labs</title>', false);
+        $this->get('/contact')->assertOk()->assertSee('<title>Contact | Kernel Cloud Labs</title>', false);
     }
 
     public function test_unknown_pages_return_404_with_noindex(): void

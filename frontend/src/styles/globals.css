@@ -7,7 +7,7 @@
    Change --accent (and --accent-ink, its text-safe shade) here to re-theme the site.
 --------------------------------------------------------------------------- */
 :root {
-  /* Brand blue from the Bytecode logo system */
+  /* Brand blue from the logo system */
   --accent: #1f6bff;
 
   --ink: #0a0a0b;
@@ -434,6 +434,20 @@ html.has-custom-cursor :is(input:not([type='checkbox'], [type='radio']), textare
   }
   .prose-article > * + * {
     margin-top: 1.4em;
+  }
+  /* Text colours and alignment chosen in the editor (brand palette, see PostBody::textColors). */
+  .prose-article .color {
+    color: var(--color);
+  }
+  .dark .prose-article .color {
+    color: var(--dark-color, var(--color));
+  }
+  .prose-article small {
+    font-size: 0.85em;
+  }
+  .prose-article sub,
+  .prose-article sup {
+    font-size: 0.7em;
   }
   .prose-article > :first-child {
     margin-top: 0;

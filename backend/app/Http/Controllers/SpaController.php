@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Content\PageMeta;
 use App\Content\PostPayload;
 use App\Content\SiteContent;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -41,6 +42,10 @@ class SpaController extends Controller
         if ($post) {
             $data .= "\n".'<script id="post-content" type="application/json">'.self::json($post).'</script>';
         }
+        // Signed in to the admin: the blog shows Edit buttons. Readers get nothing extra.
+        if ($staff = $this->staff($request)) {
+            $data .= "\n".'<script id="staff-content" type="application/json">'.self::json($staff).'</script>';
+        }
 
         $html = str_replace(['<!--app:head-->', '<!--app:content-->'], [$head, $data], $shell);
 
@@ -58,6 +63,25 @@ class SpaController extends Controller
         $post = PostPayload::find($m[1], includeDrafts: $request->hasValidSignature(absolute: false));
 
         return $post ? PostPayload::full($post) : null;
+    }
+
+    /**
+     * Edit links for a team member signed in to the admin: editors and admins open the editor,
+     * viewers the read-only page. "{slug}" is replaced by the website.
+     *
+     * @return array{access: string, editUrl: string}|null
+     */
+    private function staff(Request $request): ?array
+    {
+        $user = $request->user();
+        if (! $user instanceof User || ! array_key_exists((string) $user->role, User::ROLES)) {
+            return null;
+        }
+
+        return [
+            'access' => $user->canWrite() ? 'edit' : 'view',
+            'editUrl' => $user->canWrite() ? '/admin/posts/{slug}/edit' : '/admin/posts/{slug}',
+        ];
     }
 
     /** JSON that is safe inside a <script> element. */

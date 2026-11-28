@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Models\Concerns\FlushesSiteContent;
 use App\Models\Concerns\HasSortOrder;
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['label', 'items', 'slider_row', 'sort'])]
 class TechnologyGroup extends Model
 {
-    use FlushesSiteContent, HasSortOrder;
+    use FlushesSiteContent, HasSortOrder, RecordsActivity;
 
     /** Rows of the logo slider under the home hero. */
     public const SLIDER_ROWS = [

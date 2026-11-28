@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "bytecode/website-backend",
+    "name": "kernel/website-backend",
     "type": "project",
-    "description": "CMS, API and admin for the Bytecode Software Labs website.",
+    "description": "CMS, API and admin for the Kernel Cloud Labs website.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
@@ -10,7 +10,8 @@
         "filament/filament": "^5.12",
         "intervention/image": "^4.4",
         "laravel/framework": "^13.17",
-        "laravel/tinker": "^3.0"
+        "laravel/tinker": "^3.0",
+        "openspout/openspout": "^4.23"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

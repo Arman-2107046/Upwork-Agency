@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 #
 # One image serves everything: the React site, the JSON API and the Filament admin.
-#   docker build -t bytecode .
+#   docker build -t kernel .
 # Stages: frontend (Vite build of ./frontend) -> base (PHP + extensions) -> app (final image
 # with ./backend and the built site).
 

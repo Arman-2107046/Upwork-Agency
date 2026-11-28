@@ -4,9 +4,12 @@ import { Link, useParams } from 'react-router-dom'
 import { ArticleBody } from '@/components/blog/ArticleBody'
 import { AuthorAvatar } from '@/components/blog/AuthorAvatar'
 import { AuthorCard } from '@/components/blog/AuthorCard'
+import { Comments } from '@/components/blog/Comments'
+import { CommentCountLink, LikeButton } from '@/components/blog/Engagement'
 import { PostCard } from '@/components/blog/PostCard'
 import { PostDate } from '@/components/blog/PostMeta'
 import { ShareButtons } from '@/components/blog/ShareButtons'
+import { StaffEditButton } from '@/components/blog/StaffEdit'
 import { TableOfContents } from '@/components/blog/TableOfContents'
 import { Seo } from '@/components/seo/Seo'
 import { blogPostingJsonLd } from '@/components/seo/jsonLd'
@@ -18,8 +21,10 @@ import { Spinner } from '@/components/ui/Spinner'
 import { Tag } from '@/components/ui/Tag'
 import { TextLink } from '@/components/ui/TextLink'
 import { absoluteUrl } from '@/config/site'
+import { useEngagement } from '@/hooks/useEngagement'
 import {
   blogPath,
+  categoryPath,
   cachedPost,
   getPostSummary,
   loadPost,
@@ -143,15 +148,20 @@ export default function BlogPost() {
   const summary: PostSummary | undefined =
     getPostSummary(slug) ?? (body.status === 'ready' ? body.post : undefined)
 
+  const post = body.status === 'ready' ? body.post : undefined
+  // Views, likes and comments only count on public posts (not admin previews).
+  const [engagement, setEngagement] = useEngagement(slug, Boolean(post && !post.draft))
+
   // Every live post is listed in the site content; drafts arrive embedded with a preview link.
   if (!summary || body.status === 'missing') return <NotFound />
 
-  const post = body.status === 'ready' ? body.post : undefined
   const url = absoluteUrl(blogPath(summary.slug))
   const index = posts.findIndex((p) => p.slug === summary.slug)
   const newer = index > 0 ? posts[index - 1] : undefined
   const older = index >= 0 ? posts[index + 1] : undefined
   const related = relatedPosts(summary)
+  const shareImage = post?.shareImage ? absoluteUrl(post.shareImage) : undefined
+  const commentCount = engagement?.comments ?? post?.comments.length ?? 0
 
   return (
     <>
@@ -159,7 +169,8 @@ export default function BlogPost() {
         title={post?.seoTitle ?? summary.title}
         description={post?.seoDescription ?? summary.excerpt}
         path={blogPath(summary.slug)}
-        image={summary.cover.src}
+        image={shareImage ?? summary.cover.src}
+        imageIsCard={Boolean(shareImage)}
         type="article"
         noindex={post?.draft}
         article={{
@@ -197,7 +208,7 @@ export default function BlogPost() {
                 <li aria-hidden="true">/</li>
                 <li>
                   <Link
-                    to={`/blog?category=${summary.categorySlug}`}
+                    to={categoryPath(summary.categorySlug)}
                     className="link-underline text-accent-ink"
                   >
                     {summary.category}
@@ -241,15 +252,23 @@ export default function BlogPost() {
                 {summary.readingMinutes} min read
               </span>
             </span>
+            <StaffEditButton slug={summary.slug} />
           </Reveal>
         </div>
       </header>
 
       <div className="container-content pt-12 sm:pt-16">
         {summary.cover.src ? (
-          <ImageReveal onMount className="border border-line bg-surface-2">
-            <Media image={summary.cover} priority sizes="(min-width: 1200px) 1200px, 100vw" />
-          </ImageReveal>
+          <figure>
+            <ImageReveal onMount className="border border-line bg-surface-2">
+              <Media image={summary.cover} priority sizes="(min-width: 1200px) 1200px, 100vw" />
+            </ImageReveal>
+            {summary.coverCaption ? (
+              <figcaption className="mt-3 font-mono text-xs text-muted">
+                {summary.coverCaption}
+              </figcaption>
+            ) : null}
+          </figure>
         ) : null}
 
         <div className="mt-14 grid gap-12 sm:mt-20 lg:grid-cols-12 lg:gap-8">
@@ -263,7 +282,7 @@ export default function BlogPost() {
               ) : null}
               <div>
                 <p className="eyebrow mb-4">Share</p>
-                <ShareButtons url={url} title={summary.title} />
+                <ShareButtons url={url} title={summary.title} image={shareImage} />
               </div>
             </div>
           </aside>
@@ -301,12 +320,23 @@ export default function BlogPost() {
               </div>
             ) : null}
 
+            {post && !post.draft ? (
+              <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-line pt-8">
+                <LikeButton slug={summary.slug} engagement={engagement} onChange={setEngagement} />
+                <CommentCountLink count={commentCount} />
+              </div>
+            ) : null}
+
             <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-8 lg:hidden">
               <p className="eyebrow">Share this article</p>
-              <ShareButtons url={url} title={summary.title} />
+              <ShareButtons url={url} title={summary.title} image={shareImage} />
             </div>
 
             {summary.author ? <AuthorCard author={summary.author} className="mt-12" /> : null}
+
+            {post && !post.draft ? (
+              <Comments slug={summary.slug} comments={post.comments} className="mt-16" />
+            ) : null}
           </article>
         </div>
 

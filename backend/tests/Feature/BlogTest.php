@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Content\PostBody;
 use App\Filament\Resources\Posts\Pages\CreatePost;
 use App\Filament\Resources\Posts\PostResource;
+use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,15 +24,18 @@ class BlogTest extends TestCase
         $this->seedContent();
     }
 
-    /** @param array<string, mixed> $attributes */
+    /** @param array<string, mixed> $attributes `category` is a category name */
     private function makePost(array $attributes = []): Post
     {
+        $category = Category::query()->firstOrCreate(['name' => $attributes['category'] ?? 'Engineering']);
+        unset($attributes['category']);
+
         return Post::query()->create([
             'title' => 'Shipping a product configurator',
             'slug' => 'shipping-a-configurator',
             'excerpt' => 'What we learned building a live 3D configurator.',
             'body' => '<h2>Why it matters</h2><p>'.str_repeat('word ', 450).'</p><h3>Details</h3><p>More.</p>',
-            'category' => 'Engineering',
+            'category_id' => $category->id,
             'tags' => ['Three.js', 'E-commerce'],
             'is_published' => true,
             'published_at' => now()->subDay(),
@@ -120,14 +124,15 @@ class BlogTest extends TestCase
 
         $this->get('/blog/shipping-a-configurator')
             ->assertOk()
-            ->assertSee('<title>Configurators that sell | Bytecode Software Labs</title>', false)
+            ->assertSee('<title>Configurators that sell | Kernel Cloud Labs</title>', false)
             ->assertSee('<meta property="og:type" data-rh="true" content="article" />', false)
-            ->assertSee('<meta property="og:image" data-rh="true" content="https://bytecode.test/storage/blog/cover.png" />', false)
+            ->assertSee('<meta property="og:image" data-rh="true" content="https://bytecode.test/blog/shipping-a-configurator/share.png?v=', false)
+            ->assertSee('<meta property="og:image:width" data-rh="true" content="1200" />', false)
             ->assertSee('<meta property="article:tag" data-rh="true" content="Three.js" />', false)
             ->assertSee('"@type":"BlogPosting"', false)
             ->assertSee('<script id="post-content" type="application/json">', false);
 
-        $this->get('/blog')->assertOk()->assertSee('<title>Blog | Bytecode Software Labs</title>', false)->assertSee('"@type":"Blog"', false);
+        $this->get('/blog')->assertOk()->assertSee('<title>Blog | Kernel Cloud Labs</title>', false)->assertSee('"@type":"Blog"', false);
         $this->get('/blog/nope')->assertNotFound();
     }
 
@@ -165,7 +170,7 @@ class BlogTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        foreach (['/admin/posts', '/admin/posts/create', '/admin/users/'.$user->id.'/edit'] as $url) {
+        foreach (['/admin/posts', '/admin/posts/create', '/admin/categories', '/admin/users/'.$user->id.'/edit'] as $url) {
             $this->get($url)->assertOk();
         }
 
@@ -175,7 +180,7 @@ class BlogTest extends TestCase
                 'slug' => 'hello-world',
                 'excerpt' => 'A first post.',
                 'body' => '<h2>Intro</h2><p>Text.</p>',
-                'category' => 'News',
+                'category_id' => Category::query()->create(['name' => 'News'])->id,
                 'is_published' => true,
             ])
             ->call('create')
@@ -184,7 +189,7 @@ class BlogTest extends TestCase
         $post = Post::query()->where('slug', 'hello-world')->firstOrFail();
         $this->assertSame($user->id, $post->author_id);
         $this->assertTrue($post->isLive());
-        $this->get("/admin/posts/{$post->id}/edit")->assertOk();
+        $this->get("/admin/posts/{$post->slug}/edit")->assertOk();
         $this->getJson('/api/content')->assertJsonPath('posts.0.title', 'Hello world');
     }
 }

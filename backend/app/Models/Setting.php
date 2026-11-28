@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\FlushesSiteContent;
+use App\Models\Concerns\RecordsActivity;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +14,12 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['key', 'value'])]
 class Setting extends Model
 {
-    use FlushesSiteContent;
+    use FlushesSiteContent, RecordsActivity;
+
+    public function activityLabel(): string
+    {
+        return ucfirst((string) $this->key).' settings';
+    }
 
     protected function casts(): array
     {

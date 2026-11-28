@@ -1,4 +1,4 @@
-# Bytecode Software Labs: agency website
+# Kernel Cloud Labs: agency website
 
 A React marketing site with a Laravel + Filament CMS behind it, packaged as one Docker image
 with PostgreSQL. Ready for [Coolify](https://coolify.io).
@@ -43,7 +43,9 @@ Sign in at `/admin`. Everything the website shows is editable:
 | Admin menu               | What it controls                                                               |
 | ------------------------ | ------------------------------------------------------------------------------ |
 | Inbox › Messages         | Contact form enquiries (unread count in the menu, reply by email)              |
+| Inbox › Comments         | Blog comments waiting for approval: approve, hide or delete                    |
 | Content › Blog posts     | Articles: rich text, cover, category, tags, author, drafts, scheduling, SEO    |
+| ↳ Categories             | Blog categories: name, address, description, order, search title               |
 | Content › Projects       | Projects, cover and gallery images, scope, technologies, home page selection   |
 | Content › Services       | Services, offer list, example screenshot, icon, "Tools we use"                 |
 | Content › Technologies   | Technology groups, logo slider rows                                            |
@@ -51,7 +53,8 @@ Sign in at `/admin`. Everything the website shows is editable:
 | Pages › About page       | Statement, "How we work", team roles, footer closing line                      |
 | Settings › Site settings | Brand name, emails, Upwork link, social links, claims (17+ years, Upwork)      |
 | Settings › SEO           | Search title and description of the fixed pages (Home, Services, Work, Blog…)  |
-| Settings › Users         | Admin accounts and author profiles (role, photo, bio shown on blog posts)      |
+| Settings › Users         | Team accounts, roles (admin, editor, viewer) and author profiles               |
+| Settings › Activity log  | Every change made in the admin: who, when, what                                |
 
 Drag rows in a table to reorder projects, services and technology groups. Turning off
 "Published" hides a record from the website and the sitemap. Clearing "Years of experience"
@@ -74,7 +77,20 @@ hidden from search engines. Use Heading 2 for sections and Heading 3 inside them
 numbered table of contents beside the article. Images added in the editor are resized for phones
 like every other upload. The newest **Featured** post leads the blog page.
 
-The website gets `/blog` (lead story, category filters, search), `/blog/{slug}` (table of
+Each post has one category. Manage them under **Blog posts › Categories** (or add one straight
+from the post form): rename a category once and every post follows; drag rows to set the order
+of the filters. Every category with published posts gets its own page at
+`/blog/category/{slug}` with its description, search title and a place in the sitemap. A category
+that still has posts cannot be deleted.
+
+Readers can like posts (once each, remembered by a cookie) and comment; comments wait under
+**Inbox › Comments** and the team gets a notification in the admin. Each post gets a generated
+1200×630 share image at `/blog/{slug}/share.png`. Signed-in team members see Edit buttons on the
+blog. The full guide for the team is in [docs/blog-admin.md](docs/blog-admin.md); sample content
+for a local copy: `php artisan db:seed --class=BlogDemoSeeder`.
+
+The website gets `/blog` (lead story, category links, search), `/blog/category/{slug}`,
+`/blog/{slug}` (table of
 contents, sharing, author card, related posts) and the three newest posts on the home page,
 which appear once the first post is published. Posts are in the sitemap, have article share
 tags and BlogPosting structured data, and are listed in the RSS feed at `/blog/rss.xml`.

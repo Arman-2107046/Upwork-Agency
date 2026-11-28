@@ -12,10 +12,10 @@
     <meta property="og:description" data-rh="true" content="{{ $meta['description'] }}" />
     <meta property="og:url" data-rh="true" content="{{ $url }}" />
     <meta property="og:image" data-rh="true" content="{{ $image }}" />
-@unless ($meta['image'])
+@if (! $meta['image'] || $meta['imageIsCard'])
     <meta property="og:image:width" data-rh="true" content="1200" />
     <meta property="og:image:height" data-rh="true" content="630" />
-@endunless
+@endif
 @if ($meta['article'])
     <meta property="article:published_time" data-rh="true" content="{{ $meta['article']['publishedTime'] }}" />
     <meta property="article:modified_time" data-rh="true" content="{{ $meta['article']['modifiedTime'] }}" />
