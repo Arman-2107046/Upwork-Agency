@@ -11,11 +11,9 @@ import { ButtonLink } from '@/components/ui/Button'
 import { Media } from '@/components/ui/Media'
 import { IndexLabel } from '@/components/ui/SectionHeader'
 import { showcase, type ShowcaseStage } from '@/data/showcase'
-import { PINNED, useMediaQuery } from '@/hooks/useMediaQuery'
 import { cn } from '@/lib/cn'
 import { Reveal } from '@/motion/Reveal'
 import { SplitText } from '@/motion/SplitText'
-import { Stagger, StaggerItem } from '@/motion/Stagger'
 import { duration, ease } from '@/motion/tokens'
 import { useMotionPreference } from '@/motion/useMotionPreference'
 import { ShowcaseSketch } from './ShowcaseSketch'
@@ -49,28 +47,33 @@ function PreviewFrame({ children, label }: { children: React.ReactNode; label: s
   )
 }
 
-function Intro({ compact = false }: { compact?: boolean }) {
+function Intro() {
   return (
     <div>
-      <Reveal as="p" distance={12} className="mb-5">
+      <Reveal as="p" distance={12} className="mb-4 lg:mb-5">
         <IndexLabel index={3}>{showcase.eyebrow}</IndexLabel>
       </Reveal>
       <SplitText
         as="h2"
         id="showcase-title"
         text={showcase.title}
-        className={compact ? 'text-[clamp(2rem,1rem+2.2vw,3rem)] leading-[0.98]' : 'text-display'}
+        className="text-[clamp(1.75rem,1rem+2.2vw,3rem)] leading-[0.98]"
       />
-      <Reveal className={cn('max-w-md text-muted', compact ? 'mt-4 text-sm' : 'mt-6')}>
+      <Reveal className="mt-4 hidden max-w-md text-sm text-muted md:block [@media(max-height:620px)]:hidden">
         <p>{showcase.intro}</p>
       </Reveal>
     </div>
   )
 }
 
-function StageMarker({ progress, index }: { progress: MotionValue<number>; index: number }) {
+/** Scroll progress for one stage, 0 → 1 while that stage is active. */
+function useStageProgress(progress: MotionValue<number>, index: number) {
   const n = stages.length
-  const scaleX = useTransform(progress, [index / n, (index + 1) / n], [0, 1])
+  return useTransform(progress, [index / n, (index + 1) / n], [0, 1])
+}
+
+function StageMarker({ progress, index }: { progress: MotionValue<number>; index: number }) {
+  const scaleX = useStageProgress(progress, index)
   return (
     <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px overflow-hidden bg-line">
       <m.span className="block h-full origin-left bg-accent" style={{ scaleX }} />
@@ -78,9 +81,24 @@ function StageMarker({ progress, index }: { progress: MotionValue<number>; index
   )
 }
 
-/** Pinned (sticky) version: scroll advances the stages. Desktop + full motion only. */
-function PinnedShowcase() {
+function StageSegment({ progress, index }: { progress: MotionValue<number>; index: number }) {
+  const scaleX = useStageProgress(progress, index)
+  return (
+    <span className="h-0.5 flex-1 overflow-hidden bg-line">
+      <m.span className="block h-full origin-left bg-accent" style={{ scaleX }} />
+    </span>
+  )
+}
+
+/**
+ * Pinned (sticky) showcase on every screen size: scrolling through the section advances the
+ * stages and swaps the single preview. Desktop shows the full stage list beside the preview;
+ * smaller screens show the preview with a segmented progress bar and the active stage below.
+ * Under reduced motion it stays scroll-driven but the preview swap is a short fade.
+ */
+export function ConfiguratorShowcase() {
   const ref = useRef<HTMLElement>(null)
+  const reduced = useMotionPreference() === 'reduced'
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
   const [active, setActive] = useState(0)
 
@@ -90,22 +108,23 @@ function PinnedShowcase() {
   })
 
   const current = stages[active] ?? stages[0]
+  const number = (i: number) => String(i + 1).padStart(2, '0')
 
   return (
     <section
       ref={ref}
       aria-labelledby="showcase-title"
-      className="relative isolate h-[250vh] border-t border-line"
+      className="relative isolate h-[300vh] border-t border-line lg:h-[250vh]"
     >
-      <div className="sticky top-0 isolate flex h-screen items-center overflow-hidden">
-        <div className="container-content relative grid grid-cols-12 items-center gap-12">
-          <div className="col-span-5">
-            <Intro compact />
-            <ol className="mt-6 flex flex-col">
+      <div className="sticky top-0 isolate flex h-[100svh] items-center overflow-hidden pt-header lg:pt-0">
+        <div className="container-content relative grid gap-5 lg:grid-cols-12 lg:items-center lg:gap-12">
+          <div className="lg:col-span-5">
+            <Intro />
+            <ol className="mt-6 hidden flex-col lg:flex [@media(max-height:720px)]:mt-3">
               {stages.map((stage, i) => (
                 <li
                   key={stage.title}
-                  className="relative py-3"
+                  className="relative py-3 [@media(max-height:720px)]:py-2"
                   aria-current={i === active ? 'step' : undefined}
                 >
                   <div className="flex items-baseline gap-4">
@@ -115,7 +134,7 @@ function PinnedShowcase() {
                         i === active ? 'text-accent-ink' : 'text-muted',
                       )}
                     >
-                      {String(i + 1).padStart(2, '0')}
+                      {number(i)}
                     </span>
                     <div>
                       <h3
@@ -140,75 +159,61 @@ function PinnedShowcase() {
                 </li>
               ))}
             </ol>
-            <div className="mt-8">
+            <div className="mt-8 hidden lg:block [@media(max-height:720px)]:mt-4">
               <ButtonLink to={ctaTo} variant="secondary" arrow>
                 Explore the project
               </ButtonLink>
             </div>
           </div>
-          <div className="col-span-7">
-            <PreviewFrame label={current.title}>
-              <AnimatePresence initial={false}>
-                <m.div
-                  key={current.title}
-                  className="absolute inset-0"
-                  initial={{ opacity: 0, scale: 1.03 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: duration.base, ease: ease.outExpo }}
-                >
-                  <StagePreview stage={current} />
-                </m.div>
-              </AnimatePresence>
-            </PreviewFrame>
+
+          <div className="lg:col-span-7">
+            <div className="mx-auto w-full max-w-[calc((100svh-21rem)*4/3)] lg:max-w-[calc((100svh-7rem)*4/3)]">
+              <PreviewFrame label={current.title}>
+                <AnimatePresence initial={false}>
+                  <m.div
+                    key={current.title}
+                    className="absolute inset-0"
+                    initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 1.03 }}
+                    animate={reduced ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={
+                      reduced
+                        ? { duration: duration.reducedFade }
+                        : { duration: duration.base, ease: ease.outExpo }
+                    }
+                  >
+                    <StagePreview stage={current} />
+                  </m.div>
+                </AnimatePresence>
+              </PreviewFrame>
+            </div>
+          </div>
+
+          {/* Below lg: segmented progress, the active stage, and the CTA. */}
+          <div className="lg:hidden">
+            <div aria-hidden="true" className="flex gap-1.5">
+              {stages.map((stage, i) => (
+                <StageSegment key={stage.title} progress={scrollYProgress} index={i} />
+              ))}
+            </div>
+            <div className="mt-4 flex min-h-[4.5rem] items-baseline gap-4" aria-live="polite">
+              <span className="font-mono text-xs text-accent-ink tabular-nums">
+                {number(active)}
+                <span className="text-muted"> / {number(stages.length - 1)}</span>
+              </span>
+              <div>
+                <h3 className="text-lg tracking-[0.06em]">{current.title}</h3>
+                <p className="mt-1 text-sm text-muted">{current.text}</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <ButtonLink to={ctaTo} variant="secondary" arrow>
+                Explore the project
+              </ButtonLink>
+            </div>
           </div>
         </div>
       </div>
     </section>
   )
-}
-
-/** Stacked version for phones, tablets and reduced motion. */
-function StackedShowcase() {
-  return (
-    <section
-      aria-labelledby="showcase-title"
-      className="relative isolate overflow-x-clip border-t border-line py-28"
-    >
-      <div className="container-content relative">
-        <Intro />
-        <Stagger as="ol" className="mt-12 grid gap-10 md:grid-cols-2">
-          {stages.map((stage, i) => (
-            <StaggerItem as="li" key={stage.title}>
-              <PreviewFrame label={stage.title}>
-                <div className="absolute inset-0">
-                  <StagePreview stage={stage} />
-                </div>
-              </PreviewFrame>
-              <div className="mt-5 flex items-baseline gap-4">
-                <span className="font-mono text-xs text-accent-ink tabular-nums">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <h3 className="text-lg tracking-[0.06em]">{stage.title}</h3>
-                  <p className="mt-1 text-sm text-muted">{stage.text}</p>
-                </div>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
-        <div className="mt-12">
-          <ButtonLink to={ctaTo} variant="secondary" arrow>
-            Explore the project
-          </ButtonLink>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-export function ConfiguratorShowcase() {
-  const pref = useMotionPreference()
-  const pinnable = useMediaQuery(PINNED)
-  return pref === 'full' && pinnable ? <PinnedShowcase /> : <StackedShowcase />
 }
