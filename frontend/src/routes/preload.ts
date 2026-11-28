@@ -11,6 +11,8 @@ export function preloadRoute(to: string): void {
   else if (path.startsWith('/services/')) key = 'service'
   else if (path === '/work') key = 'work'
   else if (path.startsWith('/work/')) key = 'project'
+  else if (path === '/blog') key = 'blog'
+  else if (path.startsWith('/blog/')) key = 'post'
   else if (path === '/about') key = 'about'
   else if (path === '/contact') key = 'contact'
   if (!key || done.has(key)) return

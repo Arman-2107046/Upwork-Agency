@@ -11,7 +11,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Support\Icons\Heroicon;
 use UnitEnum;
 
-/** Titles and descriptions of the fixed pages. Services and projects use their own fields. */
+/** Titles and descriptions of the fixed pages. Services, projects and blog posts use their own fields. */
 class ManageSeo extends SettingsPage
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMagnifyingGlass;
@@ -30,6 +30,7 @@ class ManageSeo extends SettingsPage
         'home' => 'Home',
         'services' => 'Services',
         'work' => 'Work',
+        'blog' => 'Blog',
         'about' => 'About',
         'contact' => 'Contact',
     ];

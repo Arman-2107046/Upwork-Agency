@@ -43,14 +43,15 @@ Sign in at `/admin`. Everything the website shows is editable:
 | Admin menu               | What it controls                                                               |
 | ------------------------ | ------------------------------------------------------------------------------ |
 | Inbox › Messages         | Contact form enquiries (unread count in the menu, reply by email)              |
+| Content › Blog posts     | Articles: rich text, cover, category, tags, author, drafts, scheduling, SEO    |
 | Content › Projects       | Projects, cover and gallery images, scope, technologies, home page selection   |
 | Content › Services       | Services, offer list, example screenshot, icon, "Tools we use"                 |
 | Content › Technologies   | Technology groups, logo slider rows                                            |
 | Pages › Home page        | Hero, statement, process, "Why us", configurator showcase                      |
 | Pages › About page       | Statement, "How we work", team roles, footer closing line                      |
 | Settings › Site settings | Brand name, emails, Upwork link, social links, claims (17+ years, Upwork)      |
-| Settings › SEO           | Search title and description of the Home, Services, Work, About, Contact pages |
-| Settings › Users         | Admin accounts                                                                 |
+| Settings › SEO           | Search title and description of the fixed pages (Home, Services, Work, Blog…)  |
+| Settings › Users         | Admin accounts and author profiles (role, photo, bio shown on blog posts)      |
 
 Drag rows in a table to reorder projects, services and technology groups. Turning off
 "Published" hides a record from the website and the sitemap. Clearing "Years of experience"
@@ -63,6 +64,20 @@ volume on the first start.
 
 Page headings and section titles (for example "Design craft meets modern engineering.") are
 part of the design and stay in the React components.
+
+### Blog
+
+Write posts under **Content › Blog posts**. A post is a draft until **Published** is on; a
+future **Publish date** schedules it, and it goes live at that moment without another save.
+**Preview** (on a draft or scheduled post) opens a private link that works for 24 hours and is
+hidden from search engines. Use Heading 2 for sections and Heading 3 inside them: they become the
+numbered table of contents beside the article. Images added in the editor are resized for phones
+like every other upload. The newest **Featured** post leads the blog page.
+
+The website gets `/blog` (lead story, category filters, search), `/blog/{slug}` (table of
+contents, sharing, author card, related posts) and the three newest posts on the home page,
+which appear once the first post is published. Posts are in the sitemap, have article share
+tags and BlogPosting structured data, and are listed in the RSS feed at `/blog/rss.xml`.
 
 ## Deploy on Coolify
 

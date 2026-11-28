@@ -2,6 +2,7 @@
 
 namespace App\Content;
 
+use App\Models\Post;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\Setting;
@@ -11,7 +12,8 @@ use Illuminate\Support\Facades\Cache;
 
 /**
  * Builds the content payload the React site reads (see frontend/src/content/types.ts).
- * Cached until any CMS record changes (models use the FlushesSiteContent trait).
+ * Cached until any CMS record changes (models use the FlushesSiteContent trait), or until the
+ * next scheduled blog post goes live.
  */
 final class SiteContent
 {
@@ -20,7 +22,12 @@ final class SiteContent
     /** @return array<string, mixed> */
     public static function get(): array
     {
-        $content = Cache::rememberForever(self::CACHE_KEY, fn () => (new self)->build());
+        $content = Cache::get(self::CACHE_KEY);
+        if (! is_array($content)) {
+            $content = (new self)->build();
+            $next = Post::nextScheduledAt();
+            $next ? Cache::put(self::CACHE_KEY, $content, $next) : Cache::forever(self::CACHE_KEY, $content);
+        }
         // Kept out of the cache so a domain change applies without a cache flush.
         $content['site']['siteUrl'] = self::siteUrl();
 
@@ -94,7 +101,7 @@ final class SiteContent
                 'themeColor' => ($site['theme_color'] ?? null) ?: '#FFFFFF',
             ],
             'pages' => Arr::map(
-                Arr::only($pages, ['home', 'services', 'work', 'about', 'contact']),
+                Arr::only($pages, ['home', 'services', 'work', 'blog', 'about', 'contact']),
                 fn ($p) => ['title' => (string) ($p['title'] ?? ''), 'description' => (string) ($p['description'] ?? '')],
             ),
             'home' => [
@@ -153,6 +160,10 @@ final class SiteContent
                     ], fn ($v) => $v !== null) : null,
                 ], fn ($v) => $v !== null))->values()->all(),
             ...$this->technologies(),
+            'posts' => Post::query()->live()->with('author')->get()
+                ->map(fn (Post $post) => PostPayload::summary($post))
+                ->values()
+                ->all(),
         ];
     }
 

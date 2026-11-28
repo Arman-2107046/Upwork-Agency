@@ -7,7 +7,7 @@ import { defineConfig, loadEnv } from 'vite'
  * The site is served by the Laravel backend in production (it fills index.html with the page's
  * meta tags and the CMS content). During `npm run dev`, these paths are proxied to the backend.
  */
-const backendPaths = ['/api', '/storage', '/sitemap.xml', '/robots.txt']
+const backendPaths = ['/api', '/storage', '/sitemap.xml', '/robots.txt', '/blog/rss.xml']
 
 /** One .env at the repository root serves docker compose and the dev server. */
 const envDir = fileURLToPath(new URL('..', import.meta.url))

@@ -27,6 +27,10 @@
       "title": "Work",
       "description": "Selected projects: product configurators, digital stores and company websites for software, IT services, apparel and manufacturing businesses."
     },
+    "blog": {
+      "title": "Blog",
+      "description": "Articles from Bytecode Software Labs on web development, e-commerce, product configurators, AI chatbots and workflow automation."
+    },
     "about": {
       "title": "About",
       "description": "Bytecode Software Labs is a multidisciplinary design and development agency: graphic designers, frontend developers and backend developers in one team."

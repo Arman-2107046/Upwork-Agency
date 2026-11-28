@@ -11,17 +11,21 @@ class SitemapController extends Controller
     {
         $content = SiteContent::get();
         $base = $content['site']['siteUrl'];
-        $paths = [
-            '/', '/services', '/work', '/about', '/contact',
+        $today = now()->toDateString();
+        $paths = array_fill_keys([
+            '/', '/services', '/work', '/blog', '/about', '/contact',
             ...array_map(fn ($s) => "/services/{$s['slug']}", $content['services']),
             ...array_map(fn ($p) => "/work/{$p['slug']}", $content['projects']),
-        ];
-        $today = now()->toDateString();
+        ], $today);
+        foreach ($content['posts'] as $post) {
+            $paths["/blog/{$post['slug']}"] = substr($post['updatedAt'] ?? $post['publishedAt'], 0, 10);
+        }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n"
             .'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n"
             .implode('', array_map(
-                fn ($p) => '  <url><loc>'.e($base.$p).'</loc><lastmod>'.$today."</lastmod></url>\n",
+                fn ($p, $date) => '  <url><loc>'.e($base.$p).'</loc><lastmod>'.$date."</lastmod></url>\n",
+                array_keys($paths),
                 $paths,
             ))
             ."</urlset>\n";

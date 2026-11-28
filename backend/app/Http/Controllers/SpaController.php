@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Content\PageMeta;
+use App\Content\PostPayload;
 use App\Content\SiteContent;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -10,6 +11,7 @@ use Illuminate\Http\Response;
 /**
  * Serves the React site. The built index.html gets the page's head tags and the full CMS
  * content (read synchronously by frontend/src/content/load.ts), so pages render without a loading state.
+ * A blog post page also gets that post's body; a signed preview link (from the admin) shows drafts.
  */
 class SpaController extends Controller
 {
@@ -23,24 +25,39 @@ class SpaController extends Controller
         }
 
         $content = SiteContent::get();
-        $meta = PageMeta::for($request->path(), $content);
+        $post = $this->post($request);
+        $meta = PageMeta::for($request->path(), $content, $post);
         $site = $content['site'];
 
         $head = view('spa.head', [
             'meta' => $meta,
             'site' => $site,
             'url' => $site['siteUrl'].($meta['path'] === '/' ? '/' : $meta['path']),
-            'image' => $site['siteUrl'].'/og-image.png',
+            'image' => $meta['image'] ?? $site['siteUrl'].'/og-image.png',
             'organization' => PageMeta::organization($content),
         ])->render();
 
         $data = '<script id="site-content" type="application/json">'.self::json($content).'</script>';
+        if ($post) {
+            $data .= "\n".'<script id="post-content" type="application/json">'.self::json($post).'</script>';
+        }
 
         $html = str_replace(['<!--app:head-->', '<!--app:content-->'], [$head, $data], $shell);
 
         return response($html, $meta['status'])
             ->header('Content-Type', 'text/html; charset=UTF-8')
             ->header('Cache-Control', 'no-cache, private');
+    }
+
+    /** @return array<string, mixed>|null */
+    private function post(Request $request): ?array
+    {
+        if (! preg_match('#^blog/([a-z0-9-]+)$#', trim($request->path(), '/'), $m)) {
+            return null;
+        }
+        $post = PostPayload::find($m[1], includeDrafts: $request->hasValidSignature(absolute: false));
+
+        return $post ? PostPayload::full($post) : null;
     }
 
     /** JSON that is safe inside a <script> element. */

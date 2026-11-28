@@ -15,6 +15,8 @@ const routes: RouteObject[] = [
   { path: 'services/:slug', element: page(loaders.service) },
   { path: 'work', element: page(loaders.work) },
   { path: 'work/:slug', element: page(loaders.project) },
+  { path: 'blog', element: page(loaders.blog) },
+  { path: 'blog/:slug', element: page(loaders.post) },
   { path: 'about', element: page(loaders.about) },
   { path: 'contact', element: page(loaders.contact) },
 ]

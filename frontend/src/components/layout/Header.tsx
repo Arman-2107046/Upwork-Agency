@@ -83,7 +83,7 @@ export function Header() {
             </Link>
             <NavLinks />
             <div className="flex items-center gap-3">
-              <p className="mr-2 hidden items-center gap-3 font-mono text-label tracking-[0.2em] text-muted uppercase xl:flex">
+              <p className="mr-2 hidden items-center gap-3 font-mono text-label tracking-[0.2em] whitespace-nowrap text-muted uppercase xl:flex">
                 <span className="status-dot" aria-hidden="true" />
                 Replies {site.responseTime}
               </p>

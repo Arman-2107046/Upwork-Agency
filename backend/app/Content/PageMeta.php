@@ -11,9 +11,10 @@ final class PageMeta
 {
     /**
      * @param  array<string, mixed>  $content  SiteContent::get()
-     * @return array{status: int, title: string, description: string, path: string, type: string, noindex: bool, jsonLd: list<array<string, mixed>>}
+     * @param  array<string, mixed>|null  $post  PostPayload::full() of the post at /blog/{slug}, when there is one
+     * @return array{status: int, title: string, description: string, path: string, type: string, noindex: bool, jsonLd: list<array<string, mixed>>, image: string|null, article: array<string, mixed>|null}
      */
-    public static function for(string $path, array $content): array
+    public static function for(string $path, array $content, ?array $post = null): array
     {
         $path = trim($path, '/');
         $pages = $content['pages'];
@@ -29,10 +30,12 @@ final class PageMeta
                 fn ($s) => self::serviceJsonLd($s, $content), $content['services'],
             )),
             $segments === ['work'] => $page('work', '/work'),
+            $segments === ['blog'] => $page('blog', '/blog', [self::blogJsonLd($content)]),
             $segments === ['about'] => $page('about', '/about'),
             $segments === ['contact'] => $page('contact', '/contact'),
             count($segments) === 2 && $segments[0] === 'services' => self::service($segments[1], $content),
             count($segments) === 2 && $segments[0] === 'work' => self::project($segments[1], $content),
+            count($segments) === 2 && $segments[0] === 'blog' && $post && $post['slug'] === $segments[1] => self::post($post, $content),
             default => self::notFound($content),
         };
     }
@@ -85,6 +88,66 @@ final class PageMeta
         ]);
     }
 
+    /** @param array<string, mixed> $post */
+    private static function post(array $post, array $content): array
+    {
+        $siteUrl = $content['site']['siteUrl'];
+        $url = "{$siteUrl}/blog/{$post['slug']}";
+        $image = isset($post['cover']['src']) ? $siteUrl.$post['cover']['src'] : null;
+
+        $meta = self::meta($content, $post['seoTitle'], $post['seoDescription'], "/blog/{$post['slug']}",
+            type: 'article', noindex: $post['draft'], jsonLd: [
+                array_filter([
+                    '@context' => 'https://schema.org',
+                    '@type' => 'BlogPosting',
+                    'headline' => $post['title'],
+                    'description' => $post['excerpt'],
+                    'url' => $url,
+                    'mainEntityOfPage' => $url,
+                    'image' => $image,
+                    'datePublished' => $post['publishedAt'],
+                    'dateModified' => $post['updatedAt'] ?? $post['publishedAt'],
+                    'articleSection' => $post['category'],
+                    'keywords' => $post['tags'] ? implode(', ', $post['tags']) : null,
+                    'author' => isset($post['author'])
+                        ? array_filter(['@type' => 'Person', 'name' => $post['author']['name'], 'jobTitle' => $post['author']['role'] ?? null])
+                        : self::provider($content),
+                    'publisher' => [...self::provider($content), 'logo' => ['@type' => 'ImageObject', 'url' => "{$siteUrl}/apple-touch-icon.png"]],
+                ], fn ($v) => $v !== null),
+            ]);
+
+        return [
+            ...$meta,
+            'image' => $image,
+            'article' => [
+                'publishedTime' => $post['publishedAt'],
+                'modifiedTime' => $post['updatedAt'] ?? $post['publishedAt'],
+                'section' => $post['category'],
+                'tags' => $post['tags'],
+                'author' => $post['author']['name'] ?? null,
+            ],
+        ];
+    }
+
+    private static function blogJsonLd(array $content): array
+    {
+        $siteUrl = $content['site']['siteUrl'];
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'Blog',
+            'name' => "{$content['site']['brandName']} Blog",
+            'url' => "{$siteUrl}/blog",
+            'publisher' => self::provider($content),
+            'blogPost' => array_map(fn ($p) => [
+                '@type' => 'BlogPosting',
+                'headline' => $p['title'],
+                'url' => "{$siteUrl}/blog/{$p['slug']}",
+                'datePublished' => $p['publishedAt'],
+            ], array_slice($content['posts'] ?? [], 0, 10)),
+        ];
+    }
+
     private static function notFound(array $content): array
     {
         return self::meta($content, 'Page not found', 'The page you are looking for does not exist or has moved.',
@@ -129,6 +192,8 @@ final class PageMeta
             'type' => $type,
             'noindex' => $noindex,
             'jsonLd' => $jsonLd,
+            'image' => null,
+            'article' => null,
         ];
     }
 }

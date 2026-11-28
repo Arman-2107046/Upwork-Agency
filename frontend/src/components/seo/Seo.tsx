@@ -13,6 +13,14 @@ export interface SeoProps {
   noindex?: boolean
   /** Route-level structured data. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+  /** Open Graph article tags (blog posts). */
+  article?: {
+    publishedTime: string
+    modifiedTime?: string
+    section: string
+    tags: string[]
+    author?: string
+  }
 }
 
 /**
@@ -27,6 +35,7 @@ export function Seo({
   type = 'website',
   noindex = false,
   jsonLd,
+  article,
 }: SeoProps) {
   const fullTitle = title.includes(site.brandName) ? title : `${title} | ${site.brandName}`
   const url = absoluteUrl(path)
@@ -45,8 +54,20 @@ export function Seo({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
       <meta property="og:image" content={img} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
+      {image === '/og-image.png' ? <meta property="og:image:width" content="1200" /> : null}
+      {image === '/og-image.png' ? <meta property="og:image:height" content="630" /> : null}
+      {article ? <meta property="article:published_time" content={article.publishedTime} /> : null}
+      {article ? (
+        <meta
+          property="article:modified_time"
+          content={article.modifiedTime ?? article.publishedTime}
+        />
+      ) : null}
+      {article ? <meta property="article:section" content={article.section} /> : null}
+      {article?.tags.map((tag) => (
+        <meta key={tag} property="article:tag" content={tag} />
+      ))}
+      {article?.author ? <meta name="author" content={article.author} /> : null}
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />

@@ -55,7 +55,7 @@ export interface PageSeo {
   description: string
 }
 
-export type PageKey = 'home' | 'services' | 'work' | 'about' | 'contact'
+export type PageKey = 'home' | 'services' | 'work' | 'blog' | 'about' | 'contact'
 
 export interface TitledText {
   title: string
@@ -128,6 +128,48 @@ export interface TechGroup {
   items: string[]
 }
 
+export interface PostAuthor {
+  name: string
+  role?: string
+  bio?: string
+  avatar?: ImageAsset
+}
+
+/** A blog post as listed on cards (ships with every page). */
+export interface PostSummary {
+  slug: string
+  title: string
+  /** One or two sentences, also the search description. */
+  excerpt: string
+  category: string
+  categorySlug: string
+  tags: string[]
+  cover: ImageAsset
+  /** ISO 8601. */
+  publishedAt: string
+  updatedAt?: string
+  readingMinutes: number
+  featured: boolean
+  author?: PostAuthor
+}
+
+export interface TocItem {
+  id: string
+  text: string
+  level: 2 | 3
+}
+
+/** A blog post with its body, loaded by the post page. */
+export interface Post extends PostSummary {
+  /** Sanitized article HTML; h2/h3 carry the ids listed in `toc`. */
+  html: string
+  toc: TocItem[]
+  seoTitle: string
+  seoDescription: string
+  /** True for drafts and scheduled posts opened through an admin preview link. */
+  draft: boolean
+}
+
 export interface SiteContent {
   site: SiteSettings
   pages: Record<PageKey, PageSeo>
@@ -150,4 +192,6 @@ export interface SiteContent {
   services: Service[]
   technologyGroups: TechGroup[]
   sliderRows: TechGroup[]
+  /** Live blog posts, newest first. */
+  posts: PostSummary[]
 }

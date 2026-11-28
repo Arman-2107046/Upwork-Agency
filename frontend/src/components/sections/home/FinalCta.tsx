@@ -9,7 +9,7 @@ import { SplitText } from '@/motion/SplitText'
 import { sequence } from '@/motion/tokens'
 
 /** Closing call to action: centered display heading over a horizon arc. */
-export function FinalCta() {
+export function FinalCta({ index = 8 }: { index?: number }) {
   return (
     <section
       aria-labelledby="cta-title"
@@ -17,7 +17,7 @@ export function FinalCta() {
     >
       <div className="container-content relative text-center">
         <Reveal as="p" distance={12}>
-          <IndexLabel index={8}>Next step</IndexLabel>
+          <IndexLabel index={index}>Next step</IndexLabel>
         </Reveal>
         <SplitText
           as="h2"
