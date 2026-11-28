@@ -546,7 +546,7 @@
     },
     {
       "slug": "design",
-      "title": "Graphic Design & Product Visualization",
+      "title": "Product Mockups & Visualization",
       "summary": "PSD apparel mockups, smart object templates and product imagery.",
       "bullets": [
         "Professional PSD Apparel Mockups",
@@ -561,6 +561,24 @@
       "example_image": "work/shirtsmockup-product.webp",
       "example_alt": "Apparel PSD mockup product page on ShirtsMockup Store",
       "example_project_slug": "shirtsmockup"
+    },
+    {
+      "slug": "graphic-design",
+      "title": "Graphic Design: Photoshop & Illustrator",
+      "summary": "Brand assets, vector graphics, photo editing and marketing visuals in Adobe Photoshop and Illustrator.",
+      "bullets": [
+        "Logos, Icons & Vector Illustration in Adobe Illustrator",
+        "Photo Editing, Retouching & Compositing in Adobe Photoshop",
+        "Brand Assets, Social Media & Print Graphics"
+      ],
+      "outcome": "Design files ready for web, social or print, in the formats you need.",
+      "icon": "pen-tool",
+      "stack_groups": [
+        "Design"
+      ],
+      "example_image": null,
+      "example_alt": null,
+      "example_project_slug": null
     }
   ],
   "technology_groups": [

@@ -22,7 +22,7 @@ class ContentApiTest extends TestCase
             ->assertJsonPath('site.siteUrl', 'https://bytecode.test')
             ->assertJsonPath('site.claims.yearsExperience', '17+')
             ->assertJsonCount(7, 'projects')
-            ->assertJsonCount(8, 'services')
+            ->assertJsonCount(9, 'services')
             ->assertJsonCount(3, 'sliderRows')
             ->assertJsonPath('projects.0.slug', 'customtailor')
             ->assertJsonPath('projects.0.cover.src', '/storage/work/customtailor-home.webp')

@@ -28,6 +28,7 @@ class Service extends Model
         'database' => 'Database',
         'cloud' => 'Cloud',
         'palette' => 'Palette',
+        'pen-tool' => 'Pen tool',
     ];
 
     protected function casts(): array

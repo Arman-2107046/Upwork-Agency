@@ -107,6 +107,7 @@ export type ServiceIconName =
   | 'database'
   | 'cloud'
   | 'palette'
+  | 'pen-tool'
 
 export interface Service {
   slug: string

@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   Monitor,
   Palette,
+  PenTool,
   ShoppingBag,
   Workflow,
   type LucideProps,
@@ -20,6 +21,7 @@ const icons = {
   database: Database,
   cloud: Cloud,
   palette: Palette,
+  'pen-tool': PenTool,
 } satisfies Record<ServiceIconName, unknown>
 
 export function ServiceIcon({ name, ...props }: { name: ServiceIconName } & LucideProps) {
