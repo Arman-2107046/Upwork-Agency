@@ -35,17 +35,4 @@ return [
         ],
     ],
 
-    /*
-    | Cloudflare Images (all website images) and Cloudflare Stream (project videos).
-    | Leave empty to serve media from the server's storage only. Media is uploaded under
-    | the "images_prefix" folder, so other projects in the same account are never touched.
-    */
-    'cloudflare' => [
-        'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
-        'api_token' => env('CLOUDFLARE_API_TOKEN'),
-        // "Account hash" from Images > Overview, used in imagedelivery.net URLs.
-        'images_hash' => env('CLOUDFLARE_IMAGES_HASH'),
-        'prefix' => env('CLOUDFLARE_MEDIA_PREFIX', 'bytecode'),
-    ],
-
 ];

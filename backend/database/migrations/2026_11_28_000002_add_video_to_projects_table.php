@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('projects', function (Blueprint $table) {
-            // Optional walkthrough video (public disk path; streamed from Cloudflare Stream when synced).
+            // Optional walkthrough video (public disk path).
             $table->string('video')->nullable()->after('gallery');
         });
     }

@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\Projects\Schemas;
 
 use App\Filament\Support\Fields;
-use App\Media\Cloudflare;
-use App\Models\CloudMedia;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TagsInput;
@@ -13,35 +11,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Text;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
 class ProjectForm
 {
-    /** Where the saved video plays from, so editors know when Stream has taken over. */
-    private static function videoStatus(mixed $state): ?string
-    {
-        $path = is_array($state) ? (array_values($state)[0] ?? null) : $state;
-        if (! is_string($path) || $path === '') {
-            return null;
-        }
-        if (! Cloudflare::fromConfig()->streamEnabled()) {
-            return 'Plays from this server (Cloudflare Stream is not configured).';
-        }
-
-        $record = CloudMedia::query()->where('path', $path)->first();
-
-        return match ($record?->status) {
-            'ready' => 'Streaming from Cloudflare Stream.',
-            'processing' => 'Uploaded to Cloudflare Stream and processing. Plays from this server until it is ready.',
-            'failed' => 'Cloudflare Stream upload failed: '.($record->data['error'] ?? 'unknown error').'. Plays from this server; retried on the next save.',
-            default => 'Uploads to Cloudflare Stream after you save. Plays from this server until then.',
-        };
-    }
-
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -134,8 +109,6 @@ class ProjectForm
                                 ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/quicktime'])
                                 ->maxSize(200 * 1024)
                                 ->helperText('MP4, WebM or MOV, up to 200 MB.'),
-                            Text::make(fn (Get $get): ?string => self::videoStatus($get('video')))
-                                ->color('gray'),
                         ]),
                 ]),
             ]);

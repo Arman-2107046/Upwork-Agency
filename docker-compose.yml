@@ -5,7 +5,7 @@
 # On Coolify nothing has to be set before the first deploy: Coolify generates the app key and
 # the database password (SERVICE_PASSWORD_*) and fills in the URL from the domain you give the
 # app service (SERVICE_URL_APP_8080 = the container listens on port 8080). Optional settings
-# (first admin, email, Cloudflare) go in the "Environment Variables" tab. See README.md.
+# (first admin, email) go in the "Environment Variables" tab. See README.md.
 services:
   app:
     build:
@@ -47,15 +47,8 @@ services:
       - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS:-hello@example.com}
       - MAIL_FROM_NAME=${MAIL_FROM_NAME:-Bytecode Software Labs}
       - CONTACT_NOTIFY_EMAIL=${CONTACT_NOTIFY_EMAIL:-}
-      # Cloudflare Images (all website images) and Stream (project videos). Optional: without
-      # them, media is served from the app-media volume.
-      - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-}
-      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-}
-      - CLOUDFLARE_IMAGES_HASH=${CLOUDFLARE_IMAGES_HASH:-}
-      - CLOUDFLARE_MEDIA_PREFIX=${CLOUDFLARE_MEDIA_PREFIX:-bytecode}
     volumes:
       # Uploaded images and videos (and the original screenshots, copied on start).
-      # Kept even with Cloudflare on: they are the originals and the fallback.
       - app-media:/var/www/html/storage/app/public
 
   db:

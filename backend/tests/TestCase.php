@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Storage::fake('public');
-        // Tests never reach Cloudflare or any other real service.
+        // Tests never reach a real external service.
         Http::preventStrayRequests();
         config(['app.spa_index' => base_path('tests/Fixtures/index.html'), 'app.url' => 'https://bytecode.test']);
     }

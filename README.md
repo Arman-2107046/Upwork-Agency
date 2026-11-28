@@ -64,27 +64,6 @@ volume on the first start.
 Page headings and section titles (for example "Design craft meets modern engineering.") are
 part of the design and stay in the React components.
 
-## Cloudflare Images and Stream (optional)
-
-With the `CLOUDFLARE_*` variables set, every website image is copied to Cloudflare Images and
-served from `imagedelivery.net` (resized per screen, WebP/AVIF automatically), and project
-videos are copied to Cloudflare Stream (adaptive streaming player). Copying happens right after
-a save in the admin and on every container start; run it by hand with
-`php artisan media:sync`. Files keep their originals in the `app-media` volume, and anything not
-yet on Cloudflare (or failing to upload) is served from there, so the site never breaks.
-
-Requirements in the Cloudflare account:
-
-- **Images**: an active Cloudflare Images plan that includes storage (the free plan only
-  transforms images stored elsewhere), and **Flexible variants** turned on (Images › Variants).
-- **Stream**: an active Stream subscription for videos.
-- An API token with **Account › Cloudflare Images › Edit** and **Account › Stream › Edit**.
-
-Files are uploaded under the `CLOUDFLARE_MEDIA_PREFIX` folder (default `bytecode/`), so other
-projects in the same account are never touched. The dashboard shows how many images and videos
-Cloudflare serves, and the project form shows each video's status. To delete Cloudflare copies
-of media the site no longer uses: `php artisan media:sync --prune`.
-
 ## Deploy on Coolify
 
 1. Push this repository to GitHub, GitLab or any Git host Coolify can read.
@@ -101,9 +80,7 @@ of media the site no longer uses: `php artisan media:sync --prune`.
 
    Everything else is optional. Coolify generates the app key (`SERVICE_PASSWORD_APPKEY`) and
    the database password (`SERVICE_PASSWORD_POSTGRES`) itself, keeps them between deploys, and
-   fills `APP_URL` from the domain (`SERVICE_URL_APP`). Optional: `CLOUDFLARE_ACCOUNT_ID`,
-   `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_IMAGES_HASH` to serve images and videos from Cloudflare
-   (see "Cloudflare Images and Stream" above), and `MAIL_MAILER=smtp` with `MAIL_HOST`,
+   fills `APP_URL` from the domain (`SERVICE_URL_APP`). Optional: `MAIL_MAILER=smtp` with `MAIL_HOST`,
    `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` to receive contact form
    emails. Without them, messages are still saved in the admin inbox.
 

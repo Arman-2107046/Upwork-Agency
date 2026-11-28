@@ -2,7 +2,6 @@
 
 namespace App\Content;
 
-use App\Models\CloudMedia;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\Setting;
@@ -59,13 +58,7 @@ final class SiteContent
     /** @return array<string, mixed> */
     public function build(): array
     {
-        ImageAsset::useCloudMedia(CloudMedia::query()->get()->keyBy('path'));
-
-        try {
-            return $this->payload();
-        } finally {
-            ImageAsset::useCloudMedia(null);
-        }
+        return $this->payload();
     }
 
     /** @return array<string, mixed> */

@@ -2,9 +2,6 @@
 
 namespace App\Content;
 
-use App\Media\Cloudflare;
-use App\Models\CloudMedia;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -14,55 +11,18 @@ use Throwable;
 
 /**
  * Turns a path on the "public" disk into the ImageAsset shape the website expects
- * (src, srcSet, alt, width, height). Images synced to Cloudflare are served from
- * imagedelivery.net; others from the server, with an 800px WebP variant for small screens.
+ * (src, srcSet, alt, width, height). Images are served from the server, with an 800px WebP
+ * variant for small screens.
  */
 final class ImageAsset
 {
     public const VARIANT_WIDTH = 800;
-
-    /** @var Collection<string, CloudMedia>|null Cloudflare records by path, set while content is built. */
-    private static ?Collection $cloud = null;
-
-    /** @param Collection<string, CloudMedia>|null $records */
-    public static function useCloudMedia(?Collection $records): void
-    {
-        self::$cloud = $records;
-    }
-
-    /** The ready Cloudflare record for a path, when that kind of media is enabled. */
-    public static function cloudRecord(string $path, string $kind): ?CloudMedia
-    {
-        $record = self::$cloud?->get($path);
-        if (! $record || $record->kind !== $kind || ! $record->isReady()) {
-            return null;
-        }
-        $cloudflare = Cloudflare::fromConfig();
-
-        return ($kind === 'image' ? $cloudflare->imagesEnabled() : $cloudflare->streamEnabled()) ? $record : null;
-    }
 
     /** @return array<string, mixed> */
     public static function make(?string $path, ?string $alt, ?string $placeholderLabel = null): array
     {
         $alt = trim((string) $alt);
         $disk = Storage::disk('public');
-
-        if ($path && ($record = self::cloudRecord($path, 'image')) && $record->width) {
-            $cloudflare = Cloudflare::fromConfig();
-            $asset = [
-                'src' => $cloudflare->imageUrl($record->remote_id, $record->width),
-                'alt' => $alt,
-                'width' => $record->width,
-                'height' => (int) $record->height,
-            ];
-            if ($record->width > self::VARIANT_WIDTH) {
-                $asset['srcSet'] = $cloudflare->imageUrl($record->remote_id, self::VARIANT_WIDTH).' '.self::VARIANT_WIDTH.'w, '
-                    .$asset['src']." {$record->width}w";
-            }
-
-            return $asset;
-        }
 
         if (! $path || ! $disk->exists($path)) {
             // The website draws a designed placeholder block for images without a src.

@@ -16,8 +16,7 @@ export interface ImageAsset {
 }
 
 export interface VideoAsset {
-  /** "stream": Cloudflare Stream player URL (iframe). "file": a video file on the server. */
-  provider: 'stream' | 'file'
+  /** Video file uploaded in the admin. */
   src: string
   poster?: string
   title: string
