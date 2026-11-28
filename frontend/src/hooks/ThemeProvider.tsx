@@ -1,13 +1,15 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import { ThemeContext, type Theme } from './theme-context'
 
-const STORAGE_KEY = 'theme'
+// Renamed from 'theme' when dark became the default, so earlier light choices reset once.
+const STORAGE_KEY = 'theme-pref'
 
 function readStoredTheme(): Theme {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'dark' ? 'dark' : 'light'
+    // Dark is the default; only an explicit 'light' choice opts out.
+    return localStorage.getItem(STORAGE_KEY) === 'light' ? 'light' : 'dark'
   } catch {
-    return 'light'
+    return 'dark'
   }
 }
 

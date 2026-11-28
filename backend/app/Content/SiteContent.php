@@ -98,7 +98,7 @@ final class SiteContent
                     'yearsExperience' => $years !== '' ? $years : false,
                     'upworkBadge' => $upworkBadge,
                 ],
-                'themeColor' => ($site['theme_color'] ?? null) ?: '#FFFFFF',
+                'themeColor' => ($site['theme_color'] ?? null) ?: '#09090b',
             ],
             'pages' => Arr::map(
                 Arr::only($pages, ['home', 'services', 'work', 'blog', 'about', 'contact']),

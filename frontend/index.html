@@ -16,12 +16,14 @@
          preconnect is needed. If you switch to a font CDN, add its preconnect here. -->
 
     <script>
-      // Apply the saved theme before first paint to avoid a flash.
+      // Dark is the default; only a saved 'light' choice opts out. Runs before first paint.
       ;(function () {
         try {
-          var t = localStorage.getItem('theme')
-          if (t === 'dark') document.documentElement.classList.add('dark')
-        } catch (e) {}
+          var t = localStorage.getItem('theme-pref')
+          if (t !== 'light') document.documentElement.classList.add('dark')
+        } catch (e) {
+          document.documentElement.classList.add('dark')
+        }
       })()
     </script>
   </head>
